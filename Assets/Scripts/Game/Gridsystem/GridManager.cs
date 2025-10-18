@@ -62,25 +62,27 @@ public class GridManager : MonoBehaviour
     // --- MUDANÇA DE ARQUITETURA AQUI ---
     public void PlaceBuilding(BuildingData buildingData, Vector2Int startCoords)
     {
-        // 1. Pega a referência do GameObject da célula inicial (que será o pai).
         GridCell startCell = grid[startCoords.x, startCoords.y];
 
-        // 2. Instancia o prefab E O TORNA FILHO da startCell.
-        // O Unity automaticamente posiciona o filho no centro do pai.
-        GameObject newBuilding = Instantiate(buildingData.prefab, startCell.transform);
+        // Instancia o prefab principal (ex: B_Motor) e o torna filho.
+        GameObject newBuildingObject = Instantiate(buildingData.prefab, startCell.transform);
+        newBuildingObject.transform.localPosition = Vector3.zero;
 
-        // Opcional, mas garante alinhamento perfeito se o prefab tiver alguma posição residual.
-        newBuilding.transform.localPosition = Vector3.zero;
+        // Pega o novo script "cérebro" e o inicializa.
+        Constructible constructible = newBuildingObject.GetComponent<Constructible>();
+        if (constructible != null)
+        {
+            Debug.Log("===============CONSTRUÇÃO: " + buildingData.constructionTime);
+            constructible.Initialize(buildingData);
+        }
 
-        // 3. Ocupa as células logicamente, incluindo a célula pai.
+        // O resto da lógica de ocupação não muda.
         for (int y = 0; y < buildingData.size.y; y++)
         {
             for (int x = 0; x < buildingData.size.x; x++)
             {
-                grid[startCoords.x + y, startCoords.y + x].Occupy(newBuilding);
+                grid[startCoords.x + y, startCoords.y + x].Occupy(newBuildingObject);
             }
         }
-
-        Debug.Log($"Construído {buildingData.buildingName} como filho de {startCell.gameObject.name}");
     }
 }

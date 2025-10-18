@@ -15,4 +15,7 @@ public class BuildingData : ScriptableObject
 
     [Tooltip("The 3D model that will be placed in the world.")]
     public GameObject prefab;
+    public float constructionTime;
+    public int metalCost;
+    public int plasticCost;
 }
