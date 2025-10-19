@@ -150,8 +150,8 @@ MonoBehaviour:
   travelDistance: 20
   moveSpeed: 5
   lifeTime: 12
-  plasticAmount: 0
-  metalAmount: 10
+  plasticAmount: 10
+  metalAmount: 0
 --- !u!1001 &4390110969366209002
 PrefabInstance:
   m_ObjectHideFlags: 0
