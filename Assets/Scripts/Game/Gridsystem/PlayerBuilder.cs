@@ -20,6 +20,9 @@ public class PlayerBuilder : MonoBehaviour
     [Tooltip("O multiplicador de escala para o preview corresponder ao tamanho da construção final.")]
     [SerializeField] private float previewScaleMultiplier = 1.0f;
 
+    private const int CELL_REPAIR_METAL_COST = 20;
+    private const int CELL_REPAIR_PLASTIC_COST = 20;
+
     // Variáveis de estado privadas
     private BuildingData dataToBuild;
     private GridCell currentTargetCell;
@@ -152,21 +155,36 @@ public class PlayerBuilder : MonoBehaviour
         }
     }
 
+
     public InteractionType TryUse()
     {
-        // Prioridade 1: Coletar um recurso.
+        // PRIORIDADE MÁXIMA: Consertar uma célula do grid.
+        if (currentTargetCell != null && currentTargetCell.IsBroken)
+        {
+            if (ResourceManager.Instance.HasEnoughResources(CELL_REPAIR_METAL_COST, CELL_REPAIR_PLASTIC_COST))
+            {
+                ResourceManager.Instance.SpendResources(CELL_REPAIR_PLASTIC_COST, CELL_REPAIR_METAL_COST);
+                currentTargetCell.Repair();
+                return InteractionType.RepairObject; // Reutilizamos o mesmo tipo de interação.
+            }
+            else
+            {
+                Debug.Log("Recursos insuficientes para consertar a célula!");
+                return InteractionType.None;
+            }
+        }
+
+        // Prioridade 2: Coletar um recurso.
         if (currentTargetResource != null)
         {
-            Debug.Log($"<color=cyan>[PlayerBuilder]</color> Alvo de recurso encontrado: {currentTargetResource.name}. Enviando ordem para coletar.");
             currentTargetResource.Collect();
-            currentTargetResource = null; // Limpa a referência após a ordem.
+            currentTargetResource = null;
             return InteractionType.CollectResource;
         }
 
-        // Prioridade 2: Interagir com uma construção (acelerar OU consertar).
+        // Prioridade 3: Interagir com uma construção (acelerar OU consertar).
         if (currentTargetCell != null && currentTargetCell.isOccupied)
         {
-            // Pega o Destructible (todas as construções quebram são Destructible).
             Destructible destructibleTarget = currentTargetCell.placedBuildingObject.GetComponentInChildren<Destructible>();
 
             if (destructibleTarget != null)
@@ -182,7 +200,6 @@ public class PlayerBuilder : MonoBehaviour
                         return InteractionType.None;
                     }
                 }
-                // Se não está quebrado, então tenta acelerar a construção (se for Constructible).
                 else
                 {
                     Constructible constructible = currentTargetCell.placedBuildingObject.GetComponent<Constructible>();
