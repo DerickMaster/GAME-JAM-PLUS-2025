@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections.Generic; // Necessário para usar Listas
+using System.Collections.Generic;
 
 public class WeatherManager : MonoBehaviour
 {
@@ -8,11 +8,14 @@ public class WeatherManager : MonoBehaviour
     [Header("Configuração da Previsão")]
     [Tooltip("A lista completa de todos os possíveis WeatherData que o jogo pode usar.")]
     [SerializeField] private List<WeatherData> allWeatherData;
-    [Tooltip("A sequência de climas para os próximos dias.")]
-    public WeatherType[] forecast = new WeatherType[6];
 
+    // --- MUDANÇA PRINCIPAL AQUI ---
+    [Tooltip("A sequência completa de climas para todos os 30 dias.")]
+    [SerializeField] private WeatherType[] fullForecast = new WeatherType[30];
+
+    // 'CurrentDay' agora é um ponteiro para a posição atual na lista de 30 dias.
     public int CurrentDay { get; private set; } = 0;
-    public int RadioCount { get; private set; } = 0; // Contador de rádios
+    public int RadioCount { get; private set; } = 0;
 
     private Dictionary<WeatherType, WeatherData> weatherDataMap;
 
@@ -21,7 +24,6 @@ public class WeatherManager : MonoBehaviour
         if (Instance != null && Instance != this) Destroy(gameObject);
         else Instance = this;
 
-        // Cria um "dicionário" para acesso rápido aos dados do clima.
         weatherDataMap = new Dictionary<WeatherType, WeatherData>();
         foreach (var data in allWeatherData)
         {
@@ -29,44 +31,42 @@ public class WeatherManager : MonoBehaviour
         }
     }
 
-    // --- Funções para os Rádios ---
-    public void RegisterRadio()
-    {
-        RadioCount++;
-        Debug.Log($"Rádio construído! Total de rádios: {RadioCount}");
-    }
+    // --- Funções para os Rádios (não mudam) ---
+    public void RegisterRadio() { RadioCount++; }
+    public void UnregisterRadio() { RadioCount--; }
 
-    public void UnregisterRadio()
-    {
-        RadioCount--;
-        Debug.Log($"Rádio destruído! Total de rádios: {RadioCount}");
-    }
-
-    // --- Funções para a UI e o Jogo ---
+    // --- FUNÇÃO CORRIGIDA ---
+    // 'dayIndex' agora é um "deslocamento". 0 = hoje, 1 = amanhã, 2 = depois de amanhã, etc.
     public WeatherData GetDataForDay(int dayIndex)
     {
-        if (dayIndex < 0 || dayIndex >= forecast.Length) return null;
+        // Calcula o dia real na previsão de 30 dias.
+        int actualDay = CurrentDay + dayIndex;
 
-        WeatherType type = forecast[dayIndex];
+        // Checagem de segurança para garantir que não estamos tentando ler além do fim da previsão.
+        if (actualDay < 0 || actualDay >= fullForecast.Length) return null;
+
+        WeatherType type = fullForecast[actualDay];
         return weatherDataMap.ContainsKey(type) ? weatherDataMap[type] : null;
     }
 
+    // A função para avançar o dia agora simplesmente "pula uma casa" no ponteiro.
     public void AdvanceToNextDay()
     {
-        CurrentDay++;
-        if (CurrentDay >= forecast.Length)
+        CurrentDay++; // Amanhã se torna o novo "hoje".
+
+        if (CurrentDay >= fullForecast.Length)
         {
-            // O que fazer quando a previsão acaba? Por enquanto, vamos parar.
-            Debug.Log("Fim da previsão.");
+            Debug.Log("Fim da previsão de 30 dias.");
+            // Aqui podemos adicionar lógica para o fim do jogo ou para gerar mais dias aleatoriamente.
             return;
         }
 
-        WeatherData todayData = GetDataForDay(CurrentDay);
+        // Pega os dados do NOVO dia atual para o anúncio.
+        WeatherData todayData = GetDataForDay(0); // '0' sempre significa "hoje".
         if (todayData != null)
         {
-            // AQUI chamaremos a função da UI para mostrar a mensagem.
             WeatherUIManager.Instance.ShowDayAnnouncement(todayData);
-            Debug.Log($"Novo dia começou! Hoje é: {todayData.displayName_PT}");
+            Debug.Log($"Novo dia começou! Hoje ({CurrentDay}) é: {todayData.displayName_PT}");
         }
     }
 }

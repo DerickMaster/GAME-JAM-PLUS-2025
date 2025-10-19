@@ -129,8 +129,6 @@ public class ForecastDayUI
     // Função para esconder os dados do clima.
     public void SetHidden()
     {
-        // Desativa o ícone.
-        iconImage.gameObject.SetActive(false);
 
         // Apenas muda o texto para "????", sem desativar o objeto de texto.
         dayText.text = "????";
