@@ -1,52 +1,72 @@
 using UnityEngine;
-
-// An enum makes it easy and safe to select weather types in the Inspector
-public enum WeatherType
-{
-    None, // A default calm state
-    Storm,
-    SharkSeason,
-    TheCrab,
-    TheOneIsComing
-}
+using System.Collections.Generic; // Necessário para usar Listas
 
 public class WeatherManager : MonoBehaviour
 {
-    // Singleton instance
     public static WeatherManager Instance { get; private set; }
 
-    // This will create an editable list of 6 weather types in the Unity Inspector
-    [Tooltip("The forecast for the next 6 days.")]
+    [Header("Configuração da Previsão")]
+    [Tooltip("A lista completa de todos os possíveis WeatherData que o jogo pode usar.")]
+    [SerializeField] private List<WeatherData> allWeatherData;
+    [Tooltip("A sequência de climas para os próximos dias.")]
     public WeatherType[] forecast = new WeatherType[6];
 
     public int CurrentDay { get; private set; } = 0;
+    public int RadioCount { get; private set; } = 0; // Contador de rádios
 
-    private void Awake()
+    private Dictionary<WeatherType, WeatherData> weatherDataMap;
+
+    void Awake()
     {
-        // Singleton pattern setup
-        if (Instance != null && Instance != this)
+        if (Instance != null && Instance != this) Destroy(gameObject);
+        else Instance = this;
+
+        // Cria um "dicionário" para acesso rápido aos dados do clima.
+        weatherDataMap = new Dictionary<WeatherType, WeatherData>();
+        foreach (var data in allWeatherData)
         {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
+            weatherDataMap[data.type] = data;
         }
     }
 
-    public WeatherType GetCurrentWeather()
+    // --- Funções para os Rádios ---
+    public void RegisterRadio()
     {
-        if (forecast.Length > 0 && CurrentDay < forecast.Length)
-        {
-            return forecast[CurrentDay];
-        }
-        return WeatherType.None;
+        RadioCount++;
+        Debug.Log($"Rádio construído! Total de rádios: {RadioCount}");
     }
 
-    // We can call this function when a day passes in the game
+    public void UnregisterRadio()
+    {
+        RadioCount--;
+        Debug.Log($"Rádio destruído! Total de rádios: {RadioCount}");
+    }
+
+    // --- Funções para a UI e o Jogo ---
+    public WeatherData GetDataForDay(int dayIndex)
+    {
+        if (dayIndex < 0 || dayIndex >= forecast.Length) return null;
+
+        WeatherType type = forecast[dayIndex];
+        return weatherDataMap.ContainsKey(type) ? weatherDataMap[type] : null;
+    }
+
     public void AdvanceToNextDay()
     {
         CurrentDay++;
-        Debug.Log($"A new day has begun! Today's forecast: {GetCurrentWeather()}");
+        if (CurrentDay >= forecast.Length)
+        {
+            // O que fazer quando a previsão acaba? Por enquanto, vamos parar.
+            Debug.Log("Fim da previsão.");
+            return;
+        }
+
+        WeatherData todayData = GetDataForDay(CurrentDay);
+        if (todayData != null)
+        {
+            // AQUI chamaremos a função da UI para mostrar a mensagem.
+            WeatherUIManager.Instance.ShowDayAnnouncement(todayData);
+            Debug.Log($"Novo dia começou! Hoje é: {todayData.displayName_PT}");
+        }
     }
 }

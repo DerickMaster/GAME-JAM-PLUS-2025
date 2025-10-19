@@ -2,19 +2,16 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
-    // Singleton para acesso fácil de outros scripts
     public static TimeManager Instance { get; private set; }
 
-    [Tooltip("Duração de um dia no jogo, em segundos. 2 minutos = 120 segundos.")]
+    [Tooltip("Duração de um dia no jogo, em segundos.")]
     public float secondsPerDay = 120f;
 
-    // Propriedades para saber o dia atual e o tempo corrido no dia
     public int CurrentDay { get; private set; }
     public float DayTimer { get; private set; }
 
     private void Awake()
     {
-        // Configuração do Singleton
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -27,20 +24,24 @@ public class TimeManager : MonoBehaviour
 
     private void Start()
     {
-        // Inicia o jogo no dia 0
         CurrentDay = 0;
         DayTimer = 0f;
 
-        // Exibe a previsão inicial no console
-        Debug.Log($"O jogo começou! Previsão para o Dia {CurrentDay}: {WeatherManager.Instance.GetCurrentWeather()}");
+        // --- LÓGICA CORRIGIDA AQUI ---
+        // 1. Pega os dados completos do clima para o dia atual.
+        WeatherData todayData = WeatherManager.Instance.GetDataForDay(CurrentDay);
+
+        // 2. Garante que os dados existem antes de tentar usá-los.
+        if (todayData != null)
+        {
+            // 3. Usa o nome em português (displayName_PT) para a mensagem.
+            Debug.Log($"O jogo começou! Previsão para o Dia {CurrentDay}: {todayData.displayName_PT}");
+        }
     }
 
     void Update()
     {
-        // Acumula o tempo que passou desde o último frame
         DayTimer += Time.deltaTime;
-
-        // Verifica se o tempo do dia acabou
         if (DayTimer >= secondsPerDay)
         {
             AdvanceDay();
@@ -49,21 +50,17 @@ public class TimeManager : MonoBehaviour
 
     private void AdvanceDay()
     {
-        // Reseta o timer do dia
         DayTimer = 0f;
-        // Incrementa o contador de dias
-        CurrentDay++;
+        // Não incrementamos o dia aqui, deixamos o WeatherManager fazer isso.
 
-        // Avisa o WeatherManager para avançar para a previsão do próximo dia
         if (WeatherManager.Instance != null)
         {
             WeatherManager.Instance.AdvanceToNextDay();
+            // A mensagem de "novo dia" agora é mostrada pelo WeatherUIManager.
         }
         else
         {
             Debug.LogWarning("TimeManager tentou avançar o dia, mas não encontrou um WeatherManager!");
         }
-
-        Debug.Log($"O Dia {CurrentDay} começou! A previsão é: {WeatherManager.Instance.GetCurrentWeather()}");
     }
 }
