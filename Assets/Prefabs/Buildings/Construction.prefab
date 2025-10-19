@@ -47,11 +47,11 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: 1973703787
-      Data2: 1274466847
-      Data3: -1494220138
-      Data4: -1257512885
-    Path: event:/SFX/Item_Build
+      Data1: 2098666864
+      Data2: 1186518924
+      Data3: -880795212
+      Data4: -1280686029
+    Path: event:/SFX/Construction_Idle
   Event: 
   EventPlayTrigger: 1
   EventStopTrigger: 2
@@ -191,6 +191,12 @@ MonoBehaviour:
       Data3: 1229462423
       Data4: 386691644
     Path: event:/SFX/Put_Floor
+  - Guid:
+      Data1: 1973703787
+      Data2: 1274466847
+      Data3: -1494220138
+      Data4: -1257512885
+    Path: event:/SFX/Item_Build
   loopingSoundObject: {fileID: 1635966284599808313}
 --- !u!4 &3213903926657022607 stripped
 Transform:
