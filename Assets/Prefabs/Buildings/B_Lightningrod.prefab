@@ -456,6 +456,7 @@ GameObject:
   - component: {fileID: -1982124234367358125}
   - component: {fileID: 4140610558813538983}
   - component: {fileID: 2339064698754095790}
+  - component: {fileID: -4961397425946802953}
   m_Layer: 0
   m_Name: B_Lightningrod
   m_TagString: Untagged
@@ -530,6 +531,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12428804058730c429208c09b2d02166, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Destructible
+  brokenEffectObject: {fileID: 0}
+  breakageCheckInterval: 30
+  breakageChance: 0.1
+--- !u!114 &-4961397425946802953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8960555313096723623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b5c9596857fd294fa0754e3e8d03595, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FMOD_AnimationSoundHelper
+  oneShotSounds:
+  - Guid:
+      Data1: 735683434
+      Data2: 1079251224
+      Data3: 1083163838
+      Data4: -101208675
+    Path: event:/SFX/Ray_Damage
+  loopingSoundObject: {fileID: 0}
 --- !u!1001 &5890043098364103882
 PrefabInstance:
   m_ObjectHideFlags: 0
