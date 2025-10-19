@@ -137,6 +137,7 @@ MonoBehaviour:
   previewObject: {fileID: 4409451834787426322}
   constructionObject: {fileID: 876050422521377310}
   finalModelObject: {fileID: 5167215033316905152}
+  destructible: {fileID: 2848130712226824168}
   constructionBoxAnimator: {fileID: 5900455220315668091}
 --- !u!114 &2848130712226824168
 MonoBehaviour:

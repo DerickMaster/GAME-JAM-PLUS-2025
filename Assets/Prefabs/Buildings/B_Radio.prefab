@@ -296,6 +296,7 @@ MonoBehaviour:
   previewObject: {fileID: 2537895418507460680}
   constructionObject: {fileID: 7460291319733847633}
   finalModelObject: {fileID: 4287174654562059500}
+  destructible: {fileID: 715495116981185634}
   constructionBoxAnimator: {fileID: 4198125166403684916}
 --- !u!114 &715495116981185634
 MonoBehaviour:
@@ -314,7 +315,6 @@ MonoBehaviour:
   breakageChance: 0.1
   haveSound: 0
   loopableSoundObject: {fileID: 0}
-  animator: {fileID: 3081466430028773037}
 --- !u!1001 &1167163866149509629
 PrefabInstance:
   m_ObjectHideFlags: 0
