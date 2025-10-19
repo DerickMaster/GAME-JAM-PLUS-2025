@@ -30,6 +30,7 @@ public class PlayerBuilder : MonoBehaviour
     private Destructible currentDismantleTarget;
     private CollectibleResource currentTargetResource;
 
+
     void Start()
     {
         if (gameplayHighlightPrefab != null)

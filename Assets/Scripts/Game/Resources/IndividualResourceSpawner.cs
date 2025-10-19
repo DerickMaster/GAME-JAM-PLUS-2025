@@ -4,11 +4,29 @@ public class IndividualResourceSpawner : MonoBehaviour
 {
     [Header("Configuração do Spawner")]
     [Tooltip("A lista de possíveis prefabs de recursos que ESTE spawner pode criar.")]
-    [SerializeField] private GameObject[] resourcePrefabs; // << MUDANÇA PRINCIPAL
-    [Tooltip("O tempo em segundos entre cada spawn.")]
-    [SerializeField] private float spawnInterval = 10f;
+    [SerializeField] private GameObject[] resourcePrefabs;
+
+    // --- MUDANÇA AQUI: Trocamos uma variável por duas ---
+    [Tooltip("O tempo MÍNIMO em segundos entre cada spawn.")]
+    [SerializeField] private float minSpawnInterval = 8f; // Ex: mínimo de 8 segundos
+    [Tooltip("O tempo MÁXIMO em segundos entre cada spawn.")]
+    [SerializeField] private float maxSpawnInterval = 12f; // Ex: máximo de 12 segundos
 
     private float spawnTimer;
+
+    // --- NOVO: Usamos Start() para configurar o primeiro timer ---
+    void Start()
+    {
+        // Garante que o mínimo não seja maior que o máximo, evitando erros.
+        if (minSpawnInterval > maxSpawnInterval)
+        {
+            Debug.LogWarning("O tempo mínimo de spawn é maior que o máximo. Ajustando para usar o valor mínimo.", this);
+            maxSpawnInterval = minSpawnInterval;
+        }
+
+        // Define o primeiro timer para um valor aleatório, para que nem todos os spawners comecem ao mesmo tempo.
+        ResetTimer();
+    }
 
     void Update()
     {
@@ -17,24 +35,25 @@ public class IndividualResourceSpawner : MonoBehaviour
         if (spawnTimer <= 0)
         {
             SpawnResource();
-            spawnTimer = spawnInterval;
+            ResetTimer();
         }
+    }
+    private void ResetTimer()
+    {
+        spawnTimer = Random.Range(minSpawnInterval, maxSpawnInterval);
     }
 
     private void SpawnResource()
     {
-        // Checagem de segurança para garantir que a lista não está vazia.
         if (resourcePrefabs == null || resourcePrefabs.Length == 0)
         {
             Debug.LogError("A lista 'Resource Prefabs' está vazia neste spawner!", this);
             return;
         }
 
-        // 1. Escolhe um prefab aleatório da lista.
         int randomIndex = Random.Range(0, resourcePrefabs.Length);
         GameObject prefabToSpawn = resourcePrefabs[randomIndex];
 
-        // 2. Cria o recurso na posição e rotação deste spawner.
         Instantiate(prefabToSpawn, transform.position, transform.rotation);
     }
 }
