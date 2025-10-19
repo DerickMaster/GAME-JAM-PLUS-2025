@@ -8,6 +8,8 @@ public class GridCell : MonoBehaviour
     public GameObject occupiedVisualizerPrefab;
 
     public bool isOccupied { get; private set; } = false;
+
+    public bool IsBroken { get; private set; } = false;
     public GameObject placedBuildingObject { get; private set; }
 
     private GameObject visualizerInstance;
@@ -18,6 +20,8 @@ public class GridCell : MonoBehaviour
         if (visualizerInstance != null) { Destroy(visualizerInstance); }
         if (GridManager.Instance != null) { GridManager.Instance.RegisterCell(this); }
     }
+
+
 
     public void Occupy(GameObject building)
     {

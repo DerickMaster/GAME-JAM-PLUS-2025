@@ -8,12 +8,18 @@ public class WeatherManager : MonoBehaviour
     [Header("Configuração da Previsão")]
     [Tooltip("A lista completa de todos os possíveis WeatherData que o jogo pode usar.")]
     [SerializeField] private List<WeatherData> allWeatherData;
-
-    // --- MUDANÇA PRINCIPAL AQUI ---
     [Tooltip("A sequência completa de climas para todos os 30 dias.")]
     [SerializeField] private WeatherType[] fullForecast = new WeatherType[30];
 
-    // 'CurrentDay' agora é um ponteiro para a posição atual na lista de 30 dias.
+    [Header("Evento 'Pesado'")]
+    [SerializeField] private float minCrabAttackInterval = 10f;
+    [SerializeField] private float maxCrabAttackInterval = 30f;
+    private float crabAttackTimer;
+    private bool isHeavyDay = false;
+
+    // --- NOVA CONSTANTE PARA A TEMPESTADE ---
+    private const int STORM_WEIGHT_PENALTY = 6;
+
     public int CurrentDay { get; private set; } = 0;
     public int RadioCount { get; private set; } = 0;
 
@@ -31,42 +37,94 @@ public class WeatherManager : MonoBehaviour
         }
     }
 
-    // --- Funções para os Rádios (não mudam) ---
+    void Update()
+    {
+        if (isHeavyDay)
+        {
+            crabAttackTimer -= Time.deltaTime;
+            if (crabAttackTimer <= 0)
+            {
+                // Só ataca se o caranguejo não estiver já ativo.
+                if (CrabController.Instance != null && !CrabController.Instance.gameObject.activeSelf)
+                {
+                    CrabController.Instance.StartAttackSequence();
+                }
+                ResetCrabTimer();
+            }
+        }
+
+    }
+
+    private void ResetCrabTimer()
+    {
+        crabAttackTimer = Random.Range(minCrabAttackInterval, maxCrabAttackInterval);
+    }
+
+    // --- NOVA LÓGICA NO START ---
+    void Start()
+    {
+        // Verifica o clima do primeiro dia para aplicar efeitos imediatamente.
+        WeatherData todayData = GetDataForDay(0);
+        if (todayData != null && todayData.type == WeatherType.Storm)
+        {
+            Debug.Log($"<color=blue>[WeatherManager]</color> O jogo começou em uma tempestade! Adicionando peso extra.");
+            RaftStatusManager.Instance.AddWeight(STORM_WEIGHT_PENALTY);
+        }
+    }
+
     public void RegisterRadio() { RadioCount++; }
     public void UnregisterRadio() { RadioCount--; }
 
-    // --- FUNÇÃO CORRIGIDA ---
-    // 'dayIndex' agora é um "deslocamento". 0 = hoje, 1 = amanhã, 2 = depois de amanhã, etc.
     public WeatherData GetDataForDay(int dayIndex)
     {
-        // Calcula o dia real na previsão de 30 dias.
         int actualDay = CurrentDay + dayIndex;
-
-        // Checagem de segurança para garantir que não estamos tentando ler além do fim da previsão.
         if (actualDay < 0 || actualDay >= fullForecast.Length) return null;
 
         WeatherType type = fullForecast[actualDay];
         return weatherDataMap.ContainsKey(type) ? weatherDataMap[type] : null;
     }
 
-    // A função para avançar o dia agora simplesmente "pula uma casa" no ponteiro.
     public void AdvanceToNextDay()
     {
-        CurrentDay++; // Amanhã se torna o novo "hoje".
+        // --- LÓGICA ATUALIZADA AQUI ---
+
+        // 1. Verifica o clima do dia que está TERMINANDO.
+        WeatherData endedDayData = GetDataForDay(0);
+        if (endedDayData != null && endedDayData.type == WeatherType.Storm)
+        {
+            // Se era uma tempestade, remove o peso extra.
+            Debug.Log($"<color=blue>[WeatherManager]</color> A tempestade acabou! Removendo peso extra.");
+            RaftStatusManager.Instance.RemoveWeight(STORM_WEIGHT_PENALTY);
+        }
+
+        // 2. Avança para o próximo dia.
+        CurrentDay++;
 
         if (CurrentDay >= fullForecast.Length)
         {
             Debug.Log("Fim da previsão de 30 dias.");
-            // Aqui podemos adicionar lógica para o fim do jogo ou para gerar mais dias aleatoriamente.
             return;
         }
 
-        // Pega os dados do NOVO dia atual para o anúncio.
-        WeatherData todayData = GetDataForDay(0); // '0' sempre significa "hoje".
-        if (todayData != null)
+        // 3. Pega os dados e anuncia o NOVO dia.
+        WeatherData newDayData = GetDataForDay(0);
+        if (newDayData != null)
         {
-            WeatherUIManager.Instance.ShowDayAnnouncement(todayData);
-            Debug.Log($"Novo dia começou! Hoje ({CurrentDay}) é: {todayData.displayName_PT}");
+            WeatherUIManager.Instance.ShowDayAnnouncement(newDayData);
+
+            if (newDayData.type == WeatherType.Heavy)
+            {
+                isHeavyDay = true; // Liga o evento
+                ResetCrabTimer();
+            }
+
+            // 4. Verifica se o NOVO dia é uma tempestade.
+            if (newDayData.type == WeatherType.Storm)
+            {
+                // Se for, adiciona o peso extra.
+                Debug.Log($"<color=blue>[WeatherManager]</color> Uma nova tempestade começou! Adicionando peso extra.");
+                RaftStatusManager.Instance.AddWeight(STORM_WEIGHT_PENALTY);
+            }
         }
     }
 }
