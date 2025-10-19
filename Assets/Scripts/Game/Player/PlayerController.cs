@@ -146,23 +146,24 @@ public class PlayerController : MonoBehaviour
     {
         if (CurrentState == PlayerState.Gameplay)
         {
-            // A variável agora é do tipo InteractionType.
             InteractionType interactionType = playerBuilder.TryUse();
 
             if (animatorController != null)
             {
-                // Usamos um switch para lidar com os resultados do enum.
                 switch (interactionType)
                 {
                     case InteractionType.CollectResource:
-                        animatorController.TriggerCollectAnimation(); // A animação correta para coletar
+                        animatorController.TriggerCollectingAnimation();
                         break;
 
                     case InteractionType.SpeedUpConstruction:
-                        animatorController.TriggerUseAnimation(); // A animação correta para acelerar
+                        animatorController.TriggerUseAnimation();
                         break;
 
-                    // Se o tipo for 'None', não fazemos nada.
+                    case InteractionType.RepairObject: // << NOVO
+                        animatorController.TriggerRepairAnimation(); // Ou use TriggerUseAnimation() se for a mesma.
+                        break;
+
                     case InteractionType.None:
                     default:
                         break;

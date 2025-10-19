@@ -2,5 +2,6 @@ public enum InteractionType
 {
     None,
     CollectResource,
-    SpeedUpConstruction
+    SpeedUpConstruction,
+    RepairObject // << NOVO
 }

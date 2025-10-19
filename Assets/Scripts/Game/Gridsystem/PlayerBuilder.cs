@@ -154,26 +154,48 @@ public class PlayerBuilder : MonoBehaviour
 
     public InteractionType TryUse()
     {
-        // PRIORIDADE 1: Coletar um recurso.
+        // Prioridade 1: Coletar um recurso.
         if (currentTargetResource != null)
         {
-            currentTargetResource.Collect();
-            currentTargetResource = null; // Limpa a referência após coletar.
-            return InteractionType.CollectResource; // << MUDANÇA AQUI
+            // ... (lógica de coleta de recurso) ...
+            return InteractionType.CollectResource;
         }
 
-        // PRIORIDADE 2: Acelerar uma construção.
+        // Prioridade 2: Interagir com uma construção (acelerar OU consertar).
         if (currentTargetCell != null && currentTargetCell.isOccupied)
         {
-            Constructible constructible = currentTargetCell.placedBuildingObject.GetComponent<Constructible>();
-            if (constructible != null)
+            // Pega o Destructible (todas as construções quebram são Destructible).
+            Destructible destructibleTarget = currentTargetCell.placedBuildingObject.GetComponentInChildren<Destructible>();
+
+            if (destructibleTarget != null)
             {
-                constructible.SpeedUpConstruction();
-                return InteractionType.SpeedUpConstruction; // << MUDANÇA AQUI
+                // Se o item está quebrado, tenta consertar.
+                if (destructibleTarget.isBroken) // isBroken precisa ser público ou ter um getter.
+                {
+                    if (destructibleTarget.TryRepair())
+                    {
+                        return InteractionType.RepairObject; // << NOVO TIPO DE INTERAÇÃO
+                    }
+                    else
+                    {
+                        // Jogador não tem recursos para consertar, pode adicionar feedback aqui.
+                        return InteractionType.None; // Ou um novo tipo como "FailedRepair"
+                    }
+                }
+                // Se não está quebrado, então tenta acelerar a construção (se for Constructible).
+                else
+                {
+                    Constructible constructible = currentTargetCell.placedBuildingObject.GetComponent<Constructible>();
+                    if (constructible != null)
+                    {
+                        constructible.SpeedUpConstruction();
+                        return InteractionType.SpeedUpConstruction;
+                    }
+                }
             }
         }
 
-        return InteractionType.None; // << MUDANÇA AQUI
+        return InteractionType.None;
     }
 
     public void StartDismantling()
