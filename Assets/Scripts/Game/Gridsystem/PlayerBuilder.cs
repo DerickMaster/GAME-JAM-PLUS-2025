@@ -157,7 +157,9 @@ public class PlayerBuilder : MonoBehaviour
         // Prioridade 1: Coletar um recurso.
         if (currentTargetResource != null)
         {
-            // ... (lógica de coleta de recurso) ...
+            Debug.Log($"<color=cyan>[PlayerBuilder]</color> Alvo de recurso encontrado: {currentTargetResource.name}. Enviando ordem para coletar.");
+            currentTargetResource.Collect();
+            currentTargetResource = null; // Limpa a referência após a ordem.
             return InteractionType.CollectResource;
         }
 

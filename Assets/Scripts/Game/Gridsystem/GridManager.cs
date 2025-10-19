@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections.Generic; // Necessário para usar Listas
+using System.Collections.Generic; // Required to use Lists
 
 public class GridManager : MonoBehaviour
 {
@@ -49,7 +49,7 @@ public class GridManager : MonoBehaviour
                 Vector2Int currentCheckCell = new Vector2Int(checkY, checkX);
 
                 if (checkY < 0 || checkY >= 4 || checkX < 0 || checkX >= 4) return false;
-                if (grid[checkY, checkX] == null) { Debug.LogError($"Célula [{checkY},{checkX}] não registrada!"); return false; }
+                if (grid[checkY, checkX] == null) { return false; }
                 if (grid[checkY, checkX].isOccupied) return false;
                 if (currentCheckCell == playerCell) return false;
             }
@@ -57,43 +57,46 @@ public class GridManager : MonoBehaviour
         return true;
     }
 
-    // Esta é a ÚNICA versão correta da função que deve existir no script.
     public void PlaceBuilding(BuildingData buildingData, Vector2Int startCoords)
     {
-        if (WeightManager.Instance != null)
+        if (RaftStatusManager.Instance != null)
         {
-            WeightManager.Instance.AddWeight(buildingData.weight);
+            RaftStatusManager.Instance.AddWeight(buildingData.weight);
         }
 
         GridCell startCell = grid[startCoords.x, startCoords.y];
         GameObject newBuildingObject = Instantiate(buildingData.prefab, startCell.transform);
         newBuildingObject.transform.localPosition = Vector3.zero;
 
-        // Pega o script Constructible e o inicializa.
+        // Pega a lista de células que serão ocupadas.
+        List<GridCell> occupiedCells = GetCellsForArea(startCoords, buildingData.size);
+
+        // Pega o script Constructible e o inicializa, passando os dados E a lista de células.
         Constructible constructible = newBuildingObject.GetComponent<Constructible>();
         if (constructible != null)
         {
-            constructible.Initialize(buildingData);
+            constructible.Initialize(buildingData, occupiedCells);
         }
 
-        // 1. Cria uma lista para guardar as células que serão ocupadas.
-        List<GridCell> occupiedCells = new List<GridCell>();
-
-        for (int y = 0; y < buildingData.size.y; y++)
+        // Ocupa as células.
+        foreach (GridCell cell in occupiedCells)
         {
-            for (int x = 0; x < buildingData.size.x; x++)
+            cell.Occupy(newBuildingObject);
+        }
+    }
+
+    // --- THIS IS THE MISSING FUNCTION ---
+    // A helper function to get a list of all cells for a given area.
+    public List<GridCell> GetCellsForArea(Vector2Int startCoords, Vector2Int size)
+    {
+        List<GridCell> cells = new List<GridCell>();
+        for (int y = 0; y < size.y; y++)
+        {
+            for (int x = 0; x < size.x; x++)
             {
-                GridCell cell = grid[startCoords.x + y, startCoords.y + x];
-                cell.Occupy(newBuildingObject);
-                occupiedCells.Add(cell); // 2. Adiciona a célula à lista.
+                cells.Add(grid[startCoords.x + y, startCoords.y + x]);
             }
         }
-
-        // 3. Pega o script Destructible (que será ativado no futuro) e já passa as informações para ele.
-        Destructible destructible = newBuildingObject.GetComponent<Destructible>();
-        if (destructible != null)
-        {
-            destructible.Initialize(buildingData, occupiedCells);
-        }
+        return cells;
     }
 }

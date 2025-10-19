@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
   buildingName: Radio
   size: {x: 1, y: 1}
+  isMotor: 0
   prefab: {fileID: 8960555313096723623, guid: ebfd7024c1717324696493093e323c38, type: 3}
   constructionTime: 15
   metalCost: 10
   plasticCost: 20
-  weight: 10
+  weight: 1
+  powerProvided: 4

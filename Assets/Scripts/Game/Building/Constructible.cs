@@ -1,15 +1,14 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic; // Required to use Lists
 
 public class Constructible : MonoBehaviour
 {
     [Header("Referências Visuais")]
-    [Tooltip("Arraste o objeto/pasta 'Preview' aqui.")]
     [SerializeField] private GameObject previewObject;
-    [Tooltip("Arraste o objeto/pasta 'Construction' aqui.")]
     [SerializeField] private GameObject constructionObject;
-    [Tooltip("Arraste o objeto/pasta 'FinalModel' aqui.")]
     [SerializeField] private GameObject finalModelObject;
+    [SerializeField] private Destructible destructible;
 
     [Header("Animação")]
     [SerializeField] private Animator constructionBoxAnimator;
@@ -18,11 +17,18 @@ public class Constructible : MonoBehaviour
     private float constructionTimer;
     private bool isConstructing = false;
 
+    // --- THIS VARIABLE WAS MISSING ---
+    // Stores the list of grid cells this construction occupies.
+    private List<GridCell> occupiedCells;
+
     private readonly int isConstructingHash = Animator.StringToHash("isConstructing");
 
-    public void Initialize(BuildingData data)
+    // --- THIS FUNCTION SIGNATURE WAS UPDATED ---
+    // It now accepts the list of cells from the GridManager.
+    public void Initialize(BuildingData data, List<GridCell> cells)
     {
         buildingData = data;
+        occupiedCells = cells; // We store the list here.
         isConstructing = true;
         constructionTimer = 0f;
 
@@ -61,22 +67,22 @@ public class Constructible : MonoBehaviour
         }
     }
 
-    // Esta é a ÚNICA versão correta da função que deve existir no script.
     private IEnumerator CompleteConstructionSequence()
     {
         isConstructing = false;
-        if (constructionBoxAnimator != null)
-        {
-            constructionBoxAnimator.SetBool(isConstructingHash, false);
-        }
+        if (constructionBoxAnimator != null) constructionBoxAnimator.SetBool(isConstructingHash, false);
 
         yield return new WaitForSeconds(1f);
 
         if (constructionObject != null) constructionObject.SetActive(false);
         if (finalModelObject != null) finalModelObject.SetActive(true);
 
-        // Adiciona o componente Destructible ao objeto raiz da construção.
-        gameObject.AddComponent<Destructible>();
+        if (buildingData.isMotor)
+        {
+            RaftStatusManager.Instance.AddPower(buildingData.powerProvided);
+        }
+
+        destructible.Initialize(buildingData, occupiedCells);
 
         Destroy(this); // O trabalho do Constructible acabou.
     }
