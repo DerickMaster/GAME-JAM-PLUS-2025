@@ -19,5 +19,5 @@ MonoBehaviour:
   constructionTime: 15
   metalCost: 20
   plasticCost: 20
-  weight: 1
+  weight: 2
   powerProvided: 4
