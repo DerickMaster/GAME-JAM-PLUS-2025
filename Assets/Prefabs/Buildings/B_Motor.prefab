@@ -152,8 +152,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Destructible
   brokenEffectObject: {fileID: 3345621787618354686}
-  breakageCheckInterval: 5
-  breakageChance: 0.5
+  breakageCheckInterval: 30
+  breakageChance: 0.1
   haveSound: 1
   loopableSoundObject: {fileID: 4750183660790743342}
 --- !u!1001 &2740177667839472125
