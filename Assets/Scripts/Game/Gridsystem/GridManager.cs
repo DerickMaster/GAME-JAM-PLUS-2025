@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic; // Necessário para usar Listas
 
 public class GridManager : MonoBehaviour
 {
@@ -21,13 +22,11 @@ public class GridManager : MonoBehaviour
 
     public bool FindValidPlacement(Vector2Int targetCell, Vector2Int buildingSize, Vector2Int playerCell, out Vector2Int foundPlacement)
     {
-        // Esta lógica de encontrar o melhor lugar continua a mesma e funciona bem.
         for (int yOffset = 0; yOffset < buildingSize.y; yOffset++)
         {
             for (int xOffset = 0; xOffset < buildingSize.x; xOffset++)
             {
                 Vector2Int potentialStart = new Vector2Int(targetCell.x - yOffset, targetCell.y - xOffset);
-
                 if (IsAreaValid(potentialStart, buildingSize, playerCell))
                 {
                     foundPlacement = potentialStart;
@@ -35,7 +34,6 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
-
         foundPlacement = Vector2Int.zero;
         return false;
     }
@@ -59,30 +57,43 @@ public class GridManager : MonoBehaviour
         return true;
     }
 
-    // --- MUDANÇA DE ARQUITETURA AQUI ---
+    // Esta é a ÚNICA versão correta da função que deve existir no script.
     public void PlaceBuilding(BuildingData buildingData, Vector2Int startCoords)
     {
-        GridCell startCell = grid[startCoords.x, startCoords.y];
+        if (WeightManager.Instance != null)
+        {
+            WeightManager.Instance.AddWeight(buildingData.weight);
+        }
 
-        // Instancia o prefab principal (ex: B_Motor) e o torna filho.
+        GridCell startCell = grid[startCoords.x, startCoords.y];
         GameObject newBuildingObject = Instantiate(buildingData.prefab, startCell.transform);
         newBuildingObject.transform.localPosition = Vector3.zero;
 
-        // Pega o novo script "cérebro" e o inicializa.
+        // Pega o script Constructible e o inicializa.
         Constructible constructible = newBuildingObject.GetComponent<Constructible>();
         if (constructible != null)
         {
-            Debug.Log("===============CONSTRUÇÃO: " + buildingData.constructionTime);
             constructible.Initialize(buildingData);
         }
 
-        // O resto da lógica de ocupação não muda.
+        // 1. Cria uma lista para guardar as células que serão ocupadas.
+        List<GridCell> occupiedCells = new List<GridCell>();
+
         for (int y = 0; y < buildingData.size.y; y++)
         {
             for (int x = 0; x < buildingData.size.x; x++)
             {
-                grid[startCoords.x + y, startCoords.y + x].Occupy(newBuildingObject);
+                GridCell cell = grid[startCoords.x + y, startCoords.y + x];
+                cell.Occupy(newBuildingObject);
+                occupiedCells.Add(cell); // 2. Adiciona a célula à lista.
             }
+        }
+
+        // 3. Pega o script Destructible (que será ativado no futuro) e já passa as informações para ele.
+        Destructible destructible = newBuildingObject.GetComponent<Destructible>();
+        if (destructible != null)
+        {
+            destructible.Initialize(buildingData, occupiedCells);
         }
     }
 }

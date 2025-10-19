@@ -190,4 +190,31 @@ public class PlayerBuilder : MonoBehaviour
         if (other.GetComponent<GridCell>() == currentTargetCell)
             currentTargetCell = null;
     }
+
+    private Destructible currentDismantleTarget;
+
+    public void StartDismantling()
+    {
+        if (currentTargetCell == null || !currentTargetCell.isOccupied) return;
+
+        Destructible target = currentTargetCell.placedBuildingObject.GetComponentInChildren<Destructible>();
+        if (target != null)
+        {
+            currentDismantleTarget = target;
+            playerController.SetState(PlayerState.Dismantling);
+            playerController.GetComponentInChildren<PlayerAnimatorController>().SetInteracting(true); // Liga a animação
+            currentDismantleTarget.StartDismantling(); // Avisa o objeto para começar a contar o tempo.
+        }
+    }
+
+    public void StopDismantling()
+    {
+        if (currentDismantleTarget != null)
+        {
+            currentDismantleTarget.StopDismantling(); // Avisa o objeto para parar de contar.
+            currentDismantleTarget = null;
+        }
+        playerController.SetState(PlayerState.Gameplay);
+        playerController.GetComponentInChildren<PlayerAnimatorController>().SetInteracting(false); // Desliga a animação
+    }
 }

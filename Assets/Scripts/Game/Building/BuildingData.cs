@@ -18,4 +18,5 @@ public class BuildingData : ScriptableObject
     public float constructionTime;
     public int metalCost;
     public int plasticCost;
+    public int weight;
 }

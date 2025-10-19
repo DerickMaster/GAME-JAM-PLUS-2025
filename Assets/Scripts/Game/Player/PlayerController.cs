@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 // Enum define os possíveis estados do jogador. É público para que outros scripts possam vê-lo.
-public enum PlayerState { Gameplay, BuildMenu, PlacingObject }
+public enum PlayerState { Gameplay, BuildMenu, PlacingObject, Dismantling }
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -64,6 +64,13 @@ public class PlayerController : MonoBehaviour
             return; // Impede que a lógica de movimento abaixo seja executada.
         }
 
+        if (CurrentState == PlayerState.BuildMenu || CurrentState == PlayerState.Dismantling)
+        {
+            moveInput = Vector2.zero;
+            if (animatorController != null) animatorController.UpdateMovementParameters(0f);
+            return;
+        }
+
         // A lógica de movimento é executada nos estados Gameplay e PlacingObject.
         isGrounded = controller.isGrounded;
         if (isGrounded && playerVelocity.y < 0) { playerVelocity.y = -2f; }
@@ -98,6 +105,12 @@ public class PlayerController : MonoBehaviour
     public void OnMove(InputValue value)
     {
         Vector2 input = value.Get<Vector2>();
+
+        if (CurrentState == PlayerState.Dismantling)
+        {
+            playerBuilder.StopDismantling();
+            return;
+        }
 
         if (CurrentState == PlayerState.BuildMenu)
         {
@@ -152,6 +165,19 @@ public class PlayerController : MonoBehaviour
         if (CurrentState == PlayerState.BuildMenu)
         {
             buildUIManager.SubmitSelection();
+        }
+    }
+
+    public void OnInteract(InputValue value)
+    {
+        if (CurrentState == PlayerState.Gameplay && value.isPressed)
+        {
+            playerBuilder.StartDismantling();
+        }
+        // Quando soltar a tecla, para o desmantelamento.
+        else if (CurrentState == PlayerState.Dismantling && !value.isPressed)
+        {
+            playerBuilder.StopDismantling();
         }
     }
 
