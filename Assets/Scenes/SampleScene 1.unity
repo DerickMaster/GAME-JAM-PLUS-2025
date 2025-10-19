@@ -2397,7 +2397,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 655824e57915b0440a11a031e5053091, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeatherManager
-  forecast: 000000000100000001000000010000000100000001000000
+  allWeatherData:
+  - {fileID: 11400000, guid: 4db18abeb609f174b8037c33294e4f7b, type: 2}
+  - {fileID: 11400000, guid: 4db18abeb609f174b8037c33294e4f7b, type: 2}
+  - {fileID: 11400000, guid: 6e8f0f1b9c9742c4ba681be72b5163fd, type: 2}
+  - {fileID: 11400000, guid: 4db18abeb609f174b8037c33294e4f7b, type: 2}
+  - {fileID: 11400000, guid: af4a407d6ed41474eb44382fdeca1c96, type: 2}
+  - {fileID: 11400000, guid: 4db18abeb609f174b8037c33294e4f7b, type: 2}
+  - {fileID: 11400000, guid: 12ea203b6d02dc54a87651dfd55b043c, type: 2}
+  - {fileID: 11400000, guid: 4db18abeb609f174b8037c33294e4f7b, type: 2}
+  - {fileID: 11400000, guid: 9401b7121114f4c44a0566b9919dc103, type: 2}
+  - {fileID: 11400000, guid: 1e8f2c4eaf108e54c8123dcd28804178, type: 2}
+  - {fileID: 11400000, guid: b2efbb62ff0d6504e876668c89d48fe5, type: 2}
+  - {fileID: 11400000, guid: 4db18abeb609f174b8037c33294e4f7b, type: 2}
+  - {fileID: 11400000, guid: 4db18abeb609f174b8037c33294e4f7b, type: 2}
+  - {fileID: 11400000, guid: 19ee5851dfa5746468a15dd59f35c758, type: 2}
+  - {fileID: 11400000, guid: 19ee5851dfa5746468a15dd59f35c758, type: 2}
+  fullForecast: 000000000000000003000000000000000100000000000000040000000000000002000000050000000600000000000000000000000700000007000000
 --- !u!1001 &396458227
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10115,6 +10131,8 @@ MonoBehaviour:
   powerWeightSlider: {fileID: 587030151}
   sliderFillImage: {fileID: 1563776002}
   statusText: {fileID: 0}
+  overloadWarningObject: {fileID: 0}
+  countdownText: {fileID: 0}
   normalColor: {r: 0, g: 0.8, b: 1, a: 1}
   overloadedColor: {r: 1, g: 0.2, b: 0, a: 1}
 --- !u!1 &1713428614
