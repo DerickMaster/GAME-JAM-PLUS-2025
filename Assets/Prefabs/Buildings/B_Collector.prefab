@@ -389,6 +389,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4a794edb0350d4c4c9a9c7f93f270120, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4726941823760448272}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4a794edb0350d4c4c9a9c7f93f270120, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3862528252043663722}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4a794edb0350d4c4c9a9c7f93f270120, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3300668106216893178}
   m_SourcePrefab: {fileID: 100100000, guid: 4a794edb0350d4c4c9a9c7f93f270120, type: 3}
 --- !u!1 &500712696449670177 stripped
 GameObject:
@@ -431,6 +437,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FMOD_AnimationSoundHelper
   oneShotSounds: []
   loopingSoundObject: {fileID: 0}
+--- !u!65 &3862528252043663722
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 500712696449670177}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 8.5, y: 12.310871, z: 8.5}
+  m_Center: {x: 0, y: 1.4054328, z: 0}
+--- !u!114 &3300668106216893178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 500712696449670177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f2c72fceb6afe444bd71d9a6c6a5ef5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CollectorController
 --- !u!4 &988877840023373467 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4a794edb0350d4c4c9a9c7f93f270120, type: 3}
@@ -444,6 +483,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8707127067600621159}
     m_Modifications:
+    - target: {fileID: 150829024687421186, guid: 614deb53ec386df44a0c3fa301cda5e1, type: 3}
+      propertyPath: EventStopTrigger
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 150829024687421186, guid: 614deb53ec386df44a0c3fa301cda5e1, type: 3}
+      propertyPath: OverrideMaxDistance
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 2869290197310218293, guid: 614deb53ec386df44a0c3fa301cda5e1, type: 3}
       propertyPath: m_Name
       value: Construction
