@@ -66,6 +66,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ff99ab671e228e64ca4b904b9c830c11, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4485914057798394505}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ff99ab671e228e64ca4b904b9c830c11, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1211953135393728296}
   m_SourcePrefab: {fileID: 100100000, guid: ff99ab671e228e64ca4b904b9c830c11, type: 3}
 --- !u!1 &8160532117475421665 stripped
 GameObject:
@@ -106,3 +109,29 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1211953135393728296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8160532117475421665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b5c9596857fd294fa0754e3e8d03595, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FMOD_AnimationSoundHelper
+  oneShotSounds:
+  - Guid:
+      Data1: -346045213
+      Data2: 1275156061
+      Data3: -998836332
+      Data4: -1374323784
+    Path: event:/SFX/Caranguejo_Attack
+  - Guid:
+      Data1: -2074146596
+      Data2: 1330089931
+      Data3: 500660127
+      Data4: 1897925524
+    Path: event:/SFX/Hazzard_appear
+  loopingSoundObject: {fileID: 0}
