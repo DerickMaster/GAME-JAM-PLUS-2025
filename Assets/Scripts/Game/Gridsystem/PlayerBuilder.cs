@@ -169,17 +169,15 @@ public class PlayerBuilder : MonoBehaviour
 
             if (destructibleTarget != null)
             {
-                // Se o item está quebrado, tenta consertar.
-                if (destructibleTarget.isBroken) // isBroken precisa ser público ou ter um getter.
+                if (destructibleTarget.IsBroken)
                 {
                     if (destructibleTarget.TryRepair())
                     {
-                        return InteractionType.RepairObject; // << NOVO TIPO DE INTERAÇÃO
+                        return InteractionType.RepairObject;
                     }
                     else
                     {
-                        // Jogador não tem recursos para consertar, pode adicionar feedback aqui.
-                        return InteractionType.None; // Ou um novo tipo como "FailedRepair"
+                        return InteractionType.None;
                     }
                 }
                 // Se não está quebrado, então tenta acelerar a construção (se for Constructible).

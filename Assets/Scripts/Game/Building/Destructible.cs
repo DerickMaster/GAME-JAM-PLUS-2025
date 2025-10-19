@@ -5,14 +5,9 @@ public class Destructible : MonoBehaviour
 {
     public bool IsBroken { get; private set; } = false;
 
-    // --- MUDANÇA AQUI: Trocamos o prefab por uma referência direta ---
     [Header("Sistema de Quebra")]
-    [Tooltip("Arraste o objeto filho que contém o efeito de partícula de quebra aqui.")]
-    [SerializeField] private GameObject brokenEffectObject; // Em vez de brokenEffectPrefab
-
-    [Tooltip("O intervalo (em segundos) em que o item pode tentar quebrar.")]
+    [SerializeField] private GameObject brokenEffectObject;
     [SerializeField] private float breakageCheckInterval = 30f;
-    [Tooltip("A chance (de 0 a 1) de o item quebrar em cada checagem.")]
     [Range(0f, 1f)]
     [SerializeField] private float breakageChance = 0.1f;
 
@@ -29,7 +24,6 @@ public class Destructible : MonoBehaviour
 
     private void Awake()
     {
-        // Garante que o efeito de fumaça comece sempre desativado.
         if (brokenEffectObject != null)
         {
             brokenEffectObject.SetActive(false);
@@ -55,6 +49,7 @@ public class Destructible : MonoBehaviour
             return;
         }
 
+        // Agora usamos a propriedade pública 'IsBroken'
         if (!IsBroken)
         {
             breakageTimer -= Time.deltaTime;
@@ -76,7 +71,7 @@ public class Destructible : MonoBehaviour
 
     private void Break()
     {
-        IsBroken = true;
+        IsBroken = true; // Usamos a propriedade para definir o valor
         if (animator != null)
         {
             animator.SetBool(isBrokenHash, true);
@@ -106,14 +101,12 @@ public class Destructible : MonoBehaviour
 
     private void Repair()
     {
-        IsBroken = false;
+        IsBroken = false; // Usamos a propriedade para definir o valor
         if (animator != null)
         {
             animator.SetBool(isBrokenHash, false);
             animator.speed = 1f;
         }
-
-        // --- MUDANÇA AQUI: Desativa o objeto em vez de destruir ---
         if (brokenEffectObject != null)
         {
             brokenEffectObject.SetActive(false);
@@ -124,7 +117,6 @@ public class Destructible : MonoBehaviour
     public void StartDismantling()
     {
         isBeingDismantled = true;
-        // Se estiver quebrado, esconde a fumaça.
         if (IsBroken && brokenEffectObject != null)
         {
             brokenEffectObject.SetActive(false);
@@ -136,7 +128,6 @@ public class Destructible : MonoBehaviour
     {
         isBeingDismantled = false;
         dismantleProgress = 0f;
-        // Se parou de desmantelar e ainda está quebrado, mostra a fumaça de novo.
         if (IsBroken && brokenEffectObject != null)
         {
             brokenEffectObject.SetActive(true);
@@ -146,7 +137,20 @@ public class Destructible : MonoBehaviour
 
     private void Dismantle()
     {
-        // ... (lógica de devolução de recursos, etc., não muda) ...
+        int metalRefund = buildingData.metalCost / 2;
+        int plasticRefund = buildingData.plasticCost / 2;
+        ResourceManager.Instance.AddResources(plasticRefund, metalRefund);
+        if (WeightManager.Instance != null)
+        {
+            WeightManager.Instance.RemoveWeight(buildingData.weight);
+        }
+        if (occupiedCells != null)
+        {
+            foreach (GridCell cell in occupiedCells)
+            {
+                cell.Vacate();
+            }
+        }
         Destroy(gameObject);
     }
 }
