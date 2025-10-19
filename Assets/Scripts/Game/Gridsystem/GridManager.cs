@@ -52,6 +52,7 @@ public class GridManager : MonoBehaviour
                 if (grid[checkY, checkX] == null) { return false; }
                 if (grid[checkY, checkX].isOccupied) return false;
                 if (currentCheckCell == playerCell) return false;
+                if (grid[checkY, checkX].IsBroken) return false;
             }
         }
         return true;
@@ -88,7 +89,7 @@ public class GridManager : MonoBehaviour
     public void BreakRandomSlots(int count)
     {
         List<GridCell> availableCells = new List<GridCell>();
-        // Encontra todas as células que NÃO estão ocupadas e NÃO estão quebradas.
+        // Encontra todas as células que estão vazias e não estão quebradas.
         foreach (var cell in grid)
         {
             if (cell != null && !cell.isOccupied && !cell.IsBroken)
@@ -102,11 +103,13 @@ public class GridManager : MonoBehaviour
         {
             int randomIndex = Random.Range(0, availableCells.Count);
             GridCell cellToBreak = availableCells[randomIndex];
-            cellToBreak.Break(); // Você precisará criar esta função em GridCell.cs
+
+            cellToBreak.Break(); // Manda a célula se quebrar.
+
             availableCells.RemoveAt(randomIndex);
-            Debug.Log($"Célula {cellToBreak.coordinates} foi quebrada pelo caranguejo!");
         }
     }
+
 
     // --- THIS IS THE MISSING FUNCTION ---
     // A helper function to get a list of all cells for a given area.

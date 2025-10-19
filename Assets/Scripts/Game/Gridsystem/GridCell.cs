@@ -11,8 +11,10 @@ public class GridCell : MonoBehaviour
 
     public bool IsBroken { get; private set; } = false;
     public GameObject placedBuildingObject { get; private set; }
-
+    public Animator animator;
     private GameObject visualizerInstance;
+
+    private readonly int isBrokenHash = Animator.StringToHash("isBroken");
 
     void Start()
     {
@@ -21,7 +23,29 @@ public class GridCell : MonoBehaviour
         if (GridManager.Instance != null) { GridManager.Instance.RegisterCell(this); }
     }
 
+    public void Break()
+    {
+        if (IsBroken || isOccupied) return; // Não pode quebrar se já estiver quebrada ou ocupada.
 
+        IsBroken = true;
+        if (animator != null)
+        {
+            animator.SetBool(isBrokenHash, true);
+        }
+        Debug.Log($"<color=red>Célula {coordinates} foi QUEBRADA!</color>");
+    }
+
+    public void Repair()
+    {
+        if (!IsBroken) return; // Só pode consertar se estiver quebrada.
+
+        IsBroken = false;
+        if (animator != null)
+        {
+            animator.SetBool(isBrokenHash, false);
+        }
+        Debug.Log($"<color=green>Célula {coordinates} foi CONSERTADA!</color>");
+    }
 
     public void Occupy(GameObject building)
     {

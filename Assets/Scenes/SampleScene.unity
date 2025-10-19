@@ -924,6 +924,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f1a245b7ebcb484e8125f4c366bc454, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CrabController
+--- !u!95 &74449846
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 74449843}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d2420dc4b6cefff4793dde6f586f6f34, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &117526999
 GameObject:
   m_ObjectHideFlags: 0
@@ -1720,6 +1742,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridCell
   coordinates: {x: 1, y: 1}
   occupiedVisualizerPrefab: {fileID: 5282089187988816607, guid: 06eb93fcfc5576040a84aadae9039905, type: 3}
+  animator: {fileID: 1325023626}
 --- !u!1 &324333290
 GameObject:
   m_ObjectHideFlags: 0
@@ -2336,6 +2359,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridCell
   coordinates: {x: 2, y: 0}
   occupiedVisualizerPrefab: {fileID: 5282089187988816607, guid: 06eb93fcfc5576040a84aadae9039905, type: 3}
+  animator: {fileID: 1488779232}
 --- !u!1 &383408963
 GameObject:
   m_ObjectHideFlags: 0
@@ -2608,6 +2632,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6e8f0f1b9c9742c4ba681be72b5163fd, type: 2}
   - {fileID: 11400000, guid: 6e8f0f1b9c9742c4ba681be72b5163fd, type: 2}
   fullForecast: 000000000300000005000000000000000400000001000000040000000100000003000000000000000200000000000000000000000100000002000000
+  minCrabAttackInterval: 10
+  maxCrabAttackInterval: 30
 --- !u!1001 &396458227
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2680,6 +2706,11 @@ PrefabInstance:
 --- !u!4 &396458228 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1769748982391869581, guid: 716e377a662132845b60c0bb372bb443, type: 3}
+  m_PrefabInstance: {fileID: 396458227}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &396458230 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7928480278055160124, guid: 716e377a662132845b60c0bb372bb443, type: 3}
   m_PrefabInstance: {fileID: 396458227}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &399266519
@@ -2809,6 +2840,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridCell
   coordinates: {x: 1, y: 3}
   occupiedVisualizerPrefab: {fileID: 5282089187988816607, guid: 06eb93fcfc5576040a84aadae9039905, type: 3}
+  animator: {fileID: 1857050380}
 --- !u!1 &409618175
 GameObject:
   m_ObjectHideFlags: 0
@@ -4242,6 +4274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridCell
   coordinates: {x: 2, y: 1}
   occupiedVisualizerPrefab: {fileID: 5282089187988816607, guid: 06eb93fcfc5576040a84aadae9039905, type: 3}
+  animator: {fileID: 989457345}
 --- !u!1 &589760213
 GameObject:
   m_ObjectHideFlags: 0
@@ -4942,6 +4975,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridCell
   coordinates: {x: 1, y: 2}
   occupiedVisualizerPrefab: {fileID: 5282089187988816607, guid: 06eb93fcfc5576040a84aadae9039905, type: 3}
+  animator: {fileID: 1615898899}
 --- !u!1 &670633158
 GameObject:
   m_ObjectHideFlags: 0
@@ -5691,6 +5725,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1769748982391869581, guid: 716e377a662132845b60c0bb372bb443, type: 3}
   m_PrefabInstance: {fileID: 723921895}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &723921898 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7928480278055160124, guid: 716e377a662132845b60c0bb372bb443, type: 3}
+  m_PrefabInstance: {fileID: 723921895}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &724971925
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5763,6 +5802,11 @@ PrefabInstance:
 --- !u!4 &724971926 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1769748982391869581, guid: 716e377a662132845b60c0bb372bb443, type: 3}
+  m_PrefabInstance: {fileID: 724971925}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &724971928 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7928480278055160124, guid: 716e377a662132845b60c0bb372bb443, type: 3}
   m_PrefabInstance: {fileID: 724971925}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &745176905
@@ -6299,6 +6343,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1769748982391869581, guid: 716e377a662132845b60c0bb372bb443, type: 3}
   m_PrefabInstance: {fileID: 756938536}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &756938539 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7928480278055160124, guid: 716e377a662132845b60c0bb372bb443, type: 3}
+  m_PrefabInstance: {fileID: 756938536}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &761509653
 GameObject:
   m_ObjectHideFlags: 0
@@ -6426,6 +6475,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridCell
   coordinates: {x: 0, y: 1}
   occupiedVisualizerPrefab: {fileID: 5282089187988816607, guid: 06eb93fcfc5576040a84aadae9039905, type: 3}
+  animator: {fileID: 723921898}
 --- !u!1 &785371329
 GameObject:
   m_ObjectHideFlags: 0
@@ -7120,6 +7170,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1769748982391869581, guid: 716e377a662132845b60c0bb372bb443, type: 3}
   m_PrefabInstance: {fileID: 937207952}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &937207955 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7928480278055160124, guid: 716e377a662132845b60c0bb372bb443, type: 3}
+  m_PrefabInstance: {fileID: 937207952}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &948817612
 GameObject:
   m_ObjectHideFlags: 0
@@ -7308,6 +7363,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 972660421}
   m_CullTransparentMesh: 1
+--- !u!95 &989457345 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7928480278055160124, guid: 716e377a662132845b60c0bb372bb443, type: 3}
+  m_PrefabInstance: {fileID: 571433385}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1029820428
 GameObject:
   m_ObjectHideFlags: 0
@@ -7417,6 +7477,11 @@ PrefabInstance:
 --- !u!4 &1077816486 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1769748982391869581, guid: 716e377a662132845b60c0bb372bb443, type: 3}
+  m_PrefabInstance: {fileID: 1077816485}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1077816488 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7928480278055160124, guid: 716e377a662132845b60c0bb372bb443, type: 3}
   m_PrefabInstance: {fileID: 1077816485}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1103918778
@@ -7546,6 +7611,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridCell
   coordinates: {x: 3, y: 3}
   occupiedVisualizerPrefab: {fileID: 5282089187988816607, guid: 06eb93fcfc5576040a84aadae9039905, type: 3}
+  animator: {fileID: 1607467285}
 --- !u!1 &1111867530
 GameObject:
   m_ObjectHideFlags: 0
@@ -7921,6 +7987,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridCell
   coordinates: {x: 3, y: 0}
   occupiedVisualizerPrefab: {fileID: 5282089187988816607, guid: 06eb93fcfc5576040a84aadae9039905, type: 3}
+  animator: {fileID: 1380177734}
 --- !u!1 &1240735424
 GameObject:
   m_ObjectHideFlags: 0
@@ -8048,6 +8115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridCell
   coordinates: {x: 0, y: 3}
   occupiedVisualizerPrefab: {fileID: 5282089187988816607, guid: 06eb93fcfc5576040a84aadae9039905, type: 3}
+  animator: {fileID: 724971928}
 --- !u!1 &1288930731
 GameObject:
   m_ObjectHideFlags: 0
@@ -8706,6 +8774,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1769748982391869581, guid: 716e377a662132845b60c0bb372bb443, type: 3}
   m_PrefabInstance: {fileID: 1325023623}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1325023626 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7928480278055160124, guid: 716e377a662132845b60c0bb372bb443, type: 3}
+  m_PrefabInstance: {fileID: 1325023623}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1339624710
 GameObject:
   m_ObjectHideFlags: 0
@@ -9111,6 +9184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridCell
   coordinates: {x: 0, y: 0}
   occupiedVisualizerPrefab: {fileID: 5282089187988816607, guid: 06eb93fcfc5576040a84aadae9039905, type: 3}
+  animator: {fileID: 1907292729585089270}
 --- !u!1001 &1380177731
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9183,6 +9257,11 @@ PrefabInstance:
 --- !u!4 &1380177732 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1769748982391869581, guid: 716e377a662132845b60c0bb372bb443, type: 3}
+  m_PrefabInstance: {fileID: 1380177731}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1380177734 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7928480278055160124, guid: 716e377a662132845b60c0bb372bb443, type: 3}
   m_PrefabInstance: {fileID: 1380177731}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1383067237
@@ -10025,6 +10104,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1460812099}
   m_CullTransparentMesh: 1
+--- !u!95 &1488779232 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7928480278055160124, guid: 716e377a662132845b60c0bb372bb443, type: 3}
+  m_PrefabInstance: {fileID: 325401700}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1489047696
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10097,6 +10181,11 @@ PrefabInstance:
 --- !u!4 &1489047697 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1769748982391869581, guid: 716e377a662132845b60c0bb372bb443, type: 3}
+  m_PrefabInstance: {fileID: 1489047696}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1489047699 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7928480278055160124, guid: 716e377a662132845b60c0bb372bb443, type: 3}
   m_PrefabInstance: {fileID: 1489047696}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1506439954
@@ -10981,6 +11070,16 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1769748982391869581, guid: 716e377a662132845b60c0bb372bb443, type: 3}
   m_PrefabInstance: {fileID: 1607467282}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1607467285 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7928480278055160124, guid: 716e377a662132845b60c0bb372bb443, type: 3}
+  m_PrefabInstance: {fileID: 1607467282}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1615898899 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7928480278055160124, guid: 716e377a662132845b60c0bb372bb443, type: 3}
+  m_PrefabInstance: {fileID: 1902475784}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1619239914
 GameObject:
   m_ObjectHideFlags: 0
@@ -11320,6 +11419,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridCell
   coordinates: {x: 3, y: 1}
   occupiedVisualizerPrefab: {fileID: 5282089187988816607, guid: 06eb93fcfc5576040a84aadae9039905, type: 3}
+  animator: {fileID: 1077816488}
 --- !u!1 &1658227276
 GameObject:
   m_ObjectHideFlags: 0
@@ -11659,6 +11759,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridCell
   coordinates: {x: 0, y: 2}
   occupiedVisualizerPrefab: {fileID: 5282089187988816607, guid: 06eb93fcfc5576040a84aadae9039905, type: 3}
+  animator: {fileID: 937207955}
 --- !u!1 &1677203539
 GameObject:
   m_ObjectHideFlags: 0
@@ -11786,6 +11887,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridCell
   coordinates: {x: 3, y: 2}
   occupiedVisualizerPrefab: {fileID: 5282089187988816607, guid: 06eb93fcfc5576040a84aadae9039905, type: 3}
+  animator: {fileID: 1489047699}
 --- !u!1 &1685564778
 GameObject:
   m_ObjectHideFlags: 0
@@ -12378,6 +12480,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Caranguejo
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ff99ab671e228e64ca4b904b9c830c11, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12385,6 +12491,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ff99ab671e228e64ca4b904b9c830c11, type: 3}
       insertIndex: -1
       addedObject: {fileID: 74449845}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ff99ab671e228e64ca4b904b9c830c11, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 74449846}
   m_SourcePrefab: {fileID: 100100000, guid: ff99ab671e228e64ca4b904b9c830c11, type: 3}
 --- !u!1 &1758705767
 GameObject:
@@ -12588,6 +12697,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridCell
   coordinates: {x: 2, y: 2}
   occupiedVisualizerPrefab: {fileID: 5282089187988816607, guid: 06eb93fcfc5576040a84aadae9039905, type: 3}
+  animator: {fileID: 1914351851}
 --- !u!1 &1760136400
 GameObject:
   m_ObjectHideFlags: 0
@@ -13404,6 +13514,11 @@ Transform:
   - {fileID: 2136578873}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1857050380 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7928480278055160124, guid: 716e377a662132845b60c0bb372bb443, type: 3}
+  m_PrefabInstance: {fileID: 1774204224}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1858568097
 GameObject:
   m_ObjectHideFlags: 0
@@ -13835,6 +13950,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1769748982391869581, guid: 716e377a662132845b60c0bb372bb443, type: 3}
   m_PrefabInstance: {fileID: 1914351848}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1914351851 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7928480278055160124, guid: 716e377a662132845b60c0bb372bb443, type: 3}
+  m_PrefabInstance: {fileID: 1914351848}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1914375130
 GameObject:
   m_ObjectHideFlags: 0
@@ -13962,6 +14082,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridCell
   coordinates: {x: 1, y: 0}
   occupiedVisualizerPrefab: {fileID: 5282089187988816607, guid: 06eb93fcfc5576040a84aadae9039905, type: 3}
+  animator: {fileID: 396458230}
 --- !u!1 &1919209936
 GameObject:
   m_ObjectHideFlags: 0
@@ -15471,6 +15592,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridCell
   coordinates: {x: 2, y: 3}
   occupiedVisualizerPrefab: {fileID: 5282089187988816607, guid: 06eb93fcfc5576040a84aadae9039905, type: 3}
+  animator: {fileID: 756938539}
 --- !u!1001 &2131408660
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15869,6 +15991,11 @@ PrefabInstance:
 --- !u!4 &1907292729585089268 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1769748982391869581, guid: 716e377a662132845b60c0bb372bb443, type: 3}
+  m_PrefabInstance: {fileID: 1907292729585089267}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1907292729585089270 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7928480278055160124, guid: 716e377a662132845b60c0bb372bb443, type: 3}
   m_PrefabInstance: {fileID: 1907292729585089267}
   m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
