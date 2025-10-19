@@ -151,14 +151,14 @@ public class PlayerBuilder : MonoBehaviour
         }
     }
 
-    public void TryUse()
+    public InteractionType TryUse()
     {
         // PRIORIDADE 1: Coletar um recurso.
         if (currentTargetResource != null)
         {
             currentTargetResource.Collect();
             currentTargetResource = null; // Limpa a referência após coletar.
-            return; // Ação concluída, sai da função.
+            return InteractionType.CollectResource; // << MUDANÇA AQUI
         }
 
         // PRIORIDADE 2: Acelerar uma construção.
@@ -168,11 +168,11 @@ public class PlayerBuilder : MonoBehaviour
             if (constructible != null)
             {
                 constructible.SpeedUpConstruction();
-                return; // Ação concluída.
+                return InteractionType.SpeedUpConstruction; // << MUDANÇA AQUI
             }
         }
 
-        // Futuramente, outras ações de "Uso" podem ser adicionadas aqui.
+        return InteractionType.None; // << MUDANÇA AQUI
     }
 
     public void StartDismantling()

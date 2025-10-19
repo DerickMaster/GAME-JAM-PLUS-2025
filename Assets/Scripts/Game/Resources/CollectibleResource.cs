@@ -3,69 +3,78 @@ using UnityEngine;
 [RequireComponent(typeof(Animator), typeof(Collider))]
 public class CollectibleResource : MonoBehaviour
 {
-    private enum State { Spawning, Moving, Waiting, Sinking }
-    private State currentState = State.Spawning;
-
     [Header("Configuração de Movimento")]
+    [Tooltip("A distância total que o recurso vai viajar.")]
     [SerializeField] private float travelDistance = 15f;
+    [Tooltip("A velocidade de movimento do recurso.")]
     [SerializeField] private float moveSpeed = 2f;
 
-    [Header("Configuração de Coleta")]
-    [SerializeField] private int plasticAmount = 5;
-    [SerializeField] private int metalAmount = 5;
+    [Header("Ciclo de Vida")]
+    [Tooltip("O tempo total em segundos que o recurso ficará ativo antes de afundar.")]
+    [SerializeField] private float lifeTime = 12f; // Ex: 7.5s de movimento + 4.5s "parado" no final
 
-    private readonly float waitDuration = 5f;
-    private float waitTimer;
+    [Header("Valores do Recurso")]
+    [SerializeField] private int plasticAmount = 0;
+    [SerializeField] private int metalAmount = 0;
+
     private Vector3 destination;
     private Animator animator;
-    private bool hasBeenCollected = false; // Flag para evitar coleta dupla
+    private bool hasBeenCollected = false;
+    private bool isSinking = false;
+    private float lifeTimer = 0f;
 
     private readonly int isActiveHash = Animator.StringToHash("isActive");
 
     void Start()
     {
         animator = GetComponent<Animator>();
-        animator.SetBool(isActiveHash, true);
+        animator.SetBool(isActiveHash, true); // Aciona a animação "Appearing"
+
+        // Calcula o destino final
         destination = transform.position + (transform.forward * travelDistance);
     }
 
     void Update()
     {
-        switch (currentState)
-        {
-            case State.Moving:
-                transform.position = Vector3.MoveTowards(transform.position, destination, moveSpeed * Time.deltaTime);
-                if (Vector3.Distance(transform.position, destination) < 0.1f)
-                {
-                    currentState = State.Waiting;
-                    waitTimer = 0f;
-                }
-                break;
+        // Se o objeto já está afundando ou foi coletado, não faz mais nada.
+        if (isSinking || hasBeenCollected) return;
 
-            case State.Waiting:
-                waitTimer += Time.deltaTime;
-                if (waitTimer >= waitDuration)
-                {
-                    currentState = State.Sinking;
-                    animator.SetBool(isActiveHash, false);
-                }
-                break;
+        // --- LÓGICA DE MOVIMENTO CONTÍNUO ---
+        // Move o objeto em direção ao destino, mas para se a distância for alcançada.
+        if (Vector3.Distance(transform.position, destination) > 0.1f)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, destination, moveSpeed * Time.deltaTime);
+        }
+
+        // --- LÓGICA DO TIMER DE VIDA ---
+        lifeTimer += Time.deltaTime;
+        if (lifeTimer >= lifeTime)
+        {
+            Sink();
         }
     }
 
-    // --- FUNÇÕES CHAMADAS PELA ANIMAÇÃO ---
-    public void OnAppearAnimationFinished() { currentState = State.Moving; }
-    public void OnDisappearAnimationFinished() { Destroy(gameObject); }
+    // A função para afundar.
+    private void Sink()
+    {
+        isSinking = true;
+        animator.SetBool(isActiveHash, false); // Aciona a animação "Disappear".
+    }
 
-    // --- A NOVA FUNÇÃO DE COLETA ---
-    // Esta função pública será chamada pelo PlayerBuilder.
+    // Esta função DEVE ser chamada por um Animation Event no FINAL da animação "Disappear".
+    public void OnDisappearAnimationFinished()
+    {
+        Destroy(gameObject);
+    }
+
+    // A função de coleta pública, chamada pelo PlayerBuilder.
     public void Collect()
     {
-        // Só pode ser coletado se estiver no estado de espera e não tiver sido coletado ainda.
-        if (currentState != State.Waiting || hasBeenCollected) return;
+        // Só pode ser coletado se não estiver afundando ou já coletado.
+        if (isSinking || hasBeenCollected) return;
 
-        hasBeenCollected = true; // Impede chamadas múltiplas.
-        Debug.Log($"Coletado via 'Use'! +{plasticAmount} Plástico, +{metalAmount} Metal.");
+        hasBeenCollected = true;
+        Debug.Log($"Coletado! +{plasticAmount} Plástico, +{metalAmount} Metal.");
         ResourceManager.Instance.AddResources(plasticAmount, metalAmount);
 
         // Toca um som de coleta aqui, se desejar.
