@@ -16,5 +16,6 @@ MonoBehaviour:
   size: {x: 3, y: 1}
   prefab: {fileID: 8960555313096723623, guid: d62ca842c9aa34a46a93209732c06805, type: 3}
   constructionTime: 15
-  metalCost: 0
-  plasticCost: 0
+  metalCost: 20
+  plasticCost: 30
+  weight: 10

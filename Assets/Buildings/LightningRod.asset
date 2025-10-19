@@ -15,3 +15,7 @@ MonoBehaviour:
   buildingName: LightningRod
   size: {x: 1, y: 2}
   prefab: {fileID: 8960555313096723623, guid: 578ccf4d663106742925deba4f870075, type: 3}
+  constructionTime: 15
+  metalCost: 20
+  plasticCost: 20
+  weight: 10

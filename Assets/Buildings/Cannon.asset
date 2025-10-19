@@ -15,3 +15,7 @@ MonoBehaviour:
   buildingName: Cannon
   size: {x: 3, y: 1}
   prefab: {fileID: 8960555313096723623, guid: bd1da2d9c9ebd1d4193920d64a0947df, type: 3}
+  constructionTime: 15
+  metalCost: 20
+  plasticCost: 30
+  weight: 10

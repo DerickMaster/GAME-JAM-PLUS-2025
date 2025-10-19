@@ -10,8 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d927c5e14636b6049bfc4f86115132fc, type: 3}
-  m_Name: The Claw
+  m_Name: Collector
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
   buildingName: The Claw
   size: {x: 1, y: 1}
   prefab: {fileID: 8960555313096723623, guid: 6a42ea783c2ca1d4c81306b3570f916f, type: 3}
+  constructionTime: 15
+  metalCost: 20
+  plasticCost: 20
+  weight: 10

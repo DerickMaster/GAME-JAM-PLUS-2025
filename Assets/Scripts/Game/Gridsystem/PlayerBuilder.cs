@@ -17,7 +17,7 @@ public class PlayerBuilder : MonoBehaviour
     [SerializeField] private Material invalidPlacementMaterial;
 
     [Header("Preview Settings")]
-    [Tooltip("O multiplicador de escala para o preview corresponder ao tamanho da construção final (geralmente a escala da sua plataforma de grid).")]
+    [Tooltip("O multiplicador de escala para o preview corresponder ao tamanho da construção final.")]
     [SerializeField] private float previewScaleMultiplier = 1.0f;
 
     // Variáveis de estado privadas
@@ -27,20 +27,20 @@ public class PlayerBuilder : MonoBehaviour
     private Renderer[] previewRenderers;
     private GameObject highlightInstance;
     private GridCell lastHighlightedCell;
+    private Destructible currentDismantleTarget;
+    private CollectibleResource currentTargetResource;
 
     void Start()
     {
-        // Cria a instância do highlight no início do jogo para reutilizá-la.
         if (gameplayHighlightPrefab != null)
         {
             highlightInstance = Instantiate(gameplayHighlightPrefab);
-            highlightInstance.SetActive(false); // Começa escondido.
+            highlightInstance.SetActive(false);
         }
     }
 
     void Update()
     {
-        // Gerencia qual visualização deve ser mostrada com base no estado do jogador.
         if (playerController.CurrentState == PlayerState.PlacingObject)
         {
             if (previewInstance != null)
@@ -67,7 +67,6 @@ public class PlayerBuilder : MonoBehaviour
 
         if (GridManager.Instance.FindValidPlacement(currentTargetCell.coordinates, dataToBuild.size, playerCell, out Vector2Int placementCoords))
         {
-            // Se o local é VÁLIDO:
             GridCell startCell = GridManager.Instance.grid[placementCoords.x, placementCoords.y];
             previewInstance.transform.position = startCell.transform.position;
             previewInstance.transform.rotation = Quaternion.identity;
@@ -75,7 +74,6 @@ public class PlayerBuilder : MonoBehaviour
         }
         else
         {
-            // Se o local é INVÁLIDO:
             previewInstance.transform.position = currentTargetCell.transform.position;
             previewInstance.transform.rotation = Quaternion.identity;
             SetPreviewMaterial(invalidPlacementMaterial);
@@ -85,28 +83,24 @@ public class PlayerBuilder : MonoBehaviour
     private void UpdateGameplayHighlight()
     {
         if (highlightInstance == null) return;
-
-        // Otimização: só atualiza se a célula alvo mudou.
         if (currentTargetCell != lastHighlightedCell)
         {
-            if (currentTargetCell != null) // Se o detector está sobre uma nova célula
+            if (currentTargetCell != null)
             {
                 highlightInstance.SetActive(true);
                 highlightInstance.transform.position = currentTargetCell.transform.position;
             }
-            else // Se o detector saiu de todas as células
+            else
             {
                 highlightInstance.SetActive(false);
             }
-            lastHighlightedCell = currentTargetCell; // Atualiza a "memória".
+            lastHighlightedCell = currentTargetCell;
         }
     }
 
     public void EnterBuildMode(BuildingData buildingData)
     {
         if (playerController == null) return;
-
-        // Esconde o highlight do modo gameplay para dar lugar ao preview.
         if (highlightInstance != null)
         {
             highlightInstance.SetActive(false);
@@ -117,16 +111,10 @@ public class PlayerBuilder : MonoBehaviour
         playerController.SetState(PlayerState.PlacingObject);
 
         if (previewInstance != null) Destroy(previewInstance);
-
-        // --- LÓGICA SIMPLIFICADA ---
-        // 1. Cria a instância do prefab (que já deve vir com o "Preview" ativado por padrão).
         previewInstance = Instantiate(dataToBuild.prefab);
         previewInstance.transform.localScale *= previewScaleMultiplier;
 
-        // 2. Encontra os renderers para trocar o material.
         previewRenderers = previewInstance.GetComponentsInChildren<Renderer>();
-
-        // 3. Desativa os colisores do preview para que ele não interfira com nada.
         foreach (Collider col in previewInstance.GetComponentsInChildren<Collider>())
         {
             col.enabled = false;
@@ -141,12 +129,18 @@ public class PlayerBuilder : MonoBehaviour
 
     public void ConfirmBuild()
     {
-        if (currentTargetCell == null) return;
+        if (currentTargetCell == null || dataToBuild == null) return;
+
+        if (!ResourceManager.Instance.HasEnoughResources(dataToBuild.metalCost, dataToBuild.plasticCost))
+        {
+            Debug.Log("Recursos insuficientes!");
+            return;
+        }
 
         Vector2Int playerCell = playerController.CurrentGridCell;
         if (GridManager.Instance.FindValidPlacement(currentTargetCell.coordinates, dataToBuild.size, playerCell, out Vector2Int placementCoords))
         {
-            // Destrói o preview e comanda o GridManager a criar uma instância NOVA e limpa do prefab.
+            ResourceManager.Instance.SpendResources(dataToBuild.plasticCost, dataToBuild.metalCost);
             GridManager.Instance.PlaceBuilding(dataToBuild, placementCoords);
             playerController.SetState(PlayerState.Gameplay);
             if (previewInstance != null) Destroy(previewInstance);
@@ -157,41 +151,29 @@ public class PlayerBuilder : MonoBehaviour
         }
     }
 
-    // A função de troca de material, que lida com múltiplos materiais.
-    private void SetPreviewMaterial(Material mat)
+    public void TryUse()
     {
-        if (previewRenderers == null) return;
-
-        foreach (var renderer in previewRenderers)
+        // PRIORIDADE 1: Coletar um recurso.
+        if (currentTargetResource != null)
         {
-            // Cria um array de materiais com o tamanho da lista de materiais do renderer.
-            Material[] materials = new Material[renderer.materials.Length];
-
-            // Preenche cada "slot" do array com o nosso material de preview.
-            for (int i = 0; i < materials.Length; i++)
-            {
-                materials[i] = mat;
-            }
-
-            // Atribui o array de materiais modificado de volta ao renderer.
-            renderer.materials = materials;
+            currentTargetResource.Collect();
+            currentTargetResource = null; // Limpa a referência após coletar.
+            return; // Ação concluída, sai da função.
         }
-    }
 
-    // Funções de detecção de célula via Trigger.
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.GetComponent<GridCell>() != null)
-            currentTargetCell = other.GetComponent<GridCell>();
-    }
+        // PRIORIDADE 2: Acelerar uma construção.
+        if (currentTargetCell != null && currentTargetCell.isOccupied)
+        {
+            Constructible constructible = currentTargetCell.placedBuildingObject.GetComponent<Constructible>();
+            if (constructible != null)
+            {
+                constructible.SpeedUpConstruction();
+                return; // Ação concluída.
+            }
+        }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.GetComponent<GridCell>() == currentTargetCell)
-            currentTargetCell = null;
+        // Futuramente, outras ações de "Uso" podem ser adicionadas aqui.
     }
-
-    private Destructible currentDismantleTarget;
 
     public void StartDismantling()
     {
@@ -202,8 +184,8 @@ public class PlayerBuilder : MonoBehaviour
         {
             currentDismantleTarget = target;
             playerController.SetState(PlayerState.Dismantling);
-            playerController.GetComponentInChildren<PlayerAnimatorController>().SetInteracting(true); // Liga a animação
-            currentDismantleTarget.StartDismantling(); // Avisa o objeto para começar a contar o tempo.
+            playerController.GetComponentInChildren<PlayerAnimatorController>().SetInteracting(true);
+            currentDismantleTarget.StartDismantling();
         }
     }
 
@@ -211,10 +193,48 @@ public class PlayerBuilder : MonoBehaviour
     {
         if (currentDismantleTarget != null)
         {
-            currentDismantleTarget.StopDismantling(); // Avisa o objeto para parar de contar.
+            currentDismantleTarget.StopDismantling();
             currentDismantleTarget = null;
         }
         playerController.SetState(PlayerState.Gameplay);
-        playerController.GetComponentInChildren<PlayerAnimatorController>().SetInteracting(false); // Desliga a animação
+        playerController.GetComponentInChildren<PlayerAnimatorController>().SetInteracting(false);
+    }
+
+    private void SetPreviewMaterial(Material mat)
+    {
+        if (previewRenderers == null) return;
+        foreach (var renderer in previewRenderers)
+        {
+            Material[] materials = new Material[renderer.materials.Length];
+            for (int i = 0; i < materials.Length; i++)
+            {
+                materials[i] = mat;
+            }
+            renderer.materials = materials;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Checa se é uma célula do grid.
+        GridCell cell = other.GetComponent<GridCell>();
+        if (cell != null)
+            currentTargetCell = cell;
+
+        // Checa se é um recurso coletável.
+        CollectibleResource resource = other.GetComponent<CollectibleResource>();
+        if (resource != null)
+            currentTargetResource = resource;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        // Checa se está saindo de uma célula do grid.
+        if (other.GetComponent<GridCell>() == currentTargetCell)
+            currentTargetCell = null;
+
+        // Checa se está saindo de um recurso coletável.
+        if (other.GetComponent<CollectibleResource>() == currentTargetResource)
+            currentTargetResource = null;
     }
 }

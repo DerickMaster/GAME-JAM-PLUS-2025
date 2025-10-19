@@ -8,6 +8,10 @@ public class Destructible : MonoBehaviour
     private float dismantleProgress = 0f;
     private bool isBeingDismantled = false;
 
+    // --- NOVA VARIÁVEL ---
+    // Define o tempo fixo para desmontar qualquer construção.
+    private readonly float dismantleTimeToComplete = 2.0f;
+
     // O GridManager vai chamar esta função para passar os dados do item.
     public void Initialize(BuildingData data, List<GridCell> cells)
     {
@@ -22,7 +26,9 @@ public class Destructible : MonoBehaviour
         {
             dismantleProgress += Time.deltaTime;
 
-            if (dismantleProgress >= buildingData.constructionTime) // Usando constructionTime como tempo para desmontar
+            // --- A MUDANÇA ESTÁ AQUI ---
+            // Agora, a checagem usa a nossa variável de tempo fixo (2.0f).
+            if (dismantleProgress >= dismantleTimeToComplete)
             {
                 Dismantle();
             }
@@ -32,11 +38,13 @@ public class Destructible : MonoBehaviour
     // O PlayerBuilder vai chamar estas funções.
     public void StartDismantling()
     {
+        Debug.Log($"<color=lime>[Destructible] Ordem de desmantelar recebida para {gameObject.name}.</color>");
         isBeingDismantled = true;
     }
 
     public void StopDismantling()
     {
+        Debug.Log($"<color=yellow>[Destructible] Ordem de parar recebida para {gameObject.name}.</color>");
         isBeingDismantled = false;
         dismantleProgress = 0f; // Reseta o progresso se o jogador parar.
     }
@@ -50,12 +58,18 @@ public class Destructible : MonoBehaviour
         Debug.Log($"Desmantelado! Recursos recuperados: {plasticRefund} Plástico, {metalRefund} Metal.");
 
         // 2. Remove o peso do WeightManager.
-        WeightManager.Instance.RemoveWeight(buildingData.weight);
+        if (WeightManager.Instance != null)
+        {
+            WeightManager.Instance.RemoveWeight(buildingData.weight);
+        }
 
         // 3. Libera as células do grid.
-        foreach (GridCell cell in occupiedCells)
+        if (occupiedCells != null)
         {
-            cell.Vacate();
+            foreach (GridCell cell in occupiedCells)
+            {
+                cell.Vacate();
+            }
         }
 
         // 4. Destrói o objeto de construção.

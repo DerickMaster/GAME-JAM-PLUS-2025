@@ -40,10 +40,8 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         controller = GetComponent<CharacterController>();
-        // Procura "para baixo" na hierarquia para encontrar o script de animação no filho (Wrecker).
         animatorController = GetComponentInChildren<PlayerAnimatorController>();
 
-        // Prova de falha para garantir que a referência da animação foi encontrada.
         if (animatorController == null)
         {
             Debug.LogError("O PlayerController não conseguiu encontrar o PlayerAnimatorController no objeto filho! Verifique se o script está anexado ao objeto Wrecker.", this);
@@ -52,26 +50,17 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // Se o estado for BuildMenu, o jogador não pode se mover.
-        if (CurrentState == PlayerState.BuildMenu)
+        // O jogador fica parado tanto no menu quanto ao desmantelar.
+        if (CurrentState == PlayerState.BuildMenu || CurrentState == PlayerState.Dismantling)
         {
             moveInput = Vector2.zero;
-            // Mesmo parado, precisamos atualizar o Animator para que ele volte para a animação "Idle".
             if (animatorController != null)
             {
                 animatorController.UpdateMovementParameters(0f);
             }
-            return; // Impede que a lógica de movimento abaixo seja executada.
-        }
-
-        if (CurrentState == PlayerState.BuildMenu || CurrentState == PlayerState.Dismantling)
-        {
-            moveInput = Vector2.zero;
-            if (animatorController != null) animatorController.UpdateMovementParameters(0f);
             return;
         }
 
-        // A lógica de movimento é executada nos estados Gameplay e PlacingObject.
         isGrounded = controller.isGrounded;
         if (isGrounded && playerVelocity.y < 0) { playerVelocity.y = -2f; }
 
@@ -83,10 +72,8 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(moveDirection), rotationSpeed * Time.deltaTime);
         }
 
-        // Comanda o Animator a cada frame com a velocidade atual.
         if (animatorController != null)
         {
-            // Usamos moveInput.magnitude para ter uma resposta instantânea do Animator.
             animatorController.UpdateMovementParameters(moveInput.magnitude);
         }
 
@@ -94,7 +81,6 @@ public class PlayerController : MonoBehaviour
         controller.Move(playerVelocity * Time.deltaTime);
     }
 
-    // Função pública para que outros scripts possam mudar o estado do jogador.
     public void SetState(PlayerState newState)
     {
         CurrentState = newState;
@@ -104,13 +90,13 @@ public class PlayerController : MonoBehaviour
 
     public void OnMove(InputValue value)
     {
-        Vector2 input = value.Get<Vector2>();
-
         if (CurrentState == PlayerState.Dismantling)
         {
             playerBuilder.StopDismantling();
             return;
         }
+
+        Vector2 input = value.Get<Vector2>();
 
         if (CurrentState == PlayerState.BuildMenu)
         {
@@ -131,8 +117,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // A tecla 'C' tem função dupla dependendo do estado.
-    public void OnOpenBuildMenu(InputValue value)
+    public void OnOpenBuildMenu(InputValue value) // Tecla 'C'
     {
         switch (CurrentState)
         {
@@ -145,7 +130,30 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // A tecla 'Z' tem função dupla dependendo do estado.
+    public void OnDismantle(InputValue value) // Tecla 'Z'
+    {
+        if (CurrentState == PlayerState.Gameplay && value.isPressed)
+        {
+            playerBuilder.StartDismantling();
+        }
+        else if (CurrentState == PlayerState.Dismantling && !value.isPressed)
+        {
+            playerBuilder.StopDismantling();
+        }
+    }
+
+    public void OnUse(InputValue value) // Tecla 'X'
+    {
+        if (CurrentState == PlayerState.Gameplay)
+        {
+            if (animatorController != null)
+            {
+                animatorController.TriggerUseAnimation();
+            }
+            playerBuilder.TryUse();
+        }
+    }
+
     public void OnCancel(InputValue value)
     {
         switch (CurrentState)
@@ -159,8 +167,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // A tecla 'Enter' só funciona no menu.
-    public void OnSubmit(InputValue value)
+    public void OnSubmit(InputValue value) // Tecla 'Enter'
     {
         if (CurrentState == PlayerState.BuildMenu)
         {
@@ -168,26 +175,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnInteract(InputValue value)
-    {
-        if (CurrentState == PlayerState.Gameplay && value.isPressed)
-        {
-            playerBuilder.StartDismantling();
-        }
-        // Quando soltar a tecla, para o desmantelamento.
-        else if (CurrentState == PlayerState.Dismantling && !value.isPressed)
-        {
-            playerBuilder.StopDismantling();
-        }
-    }
-
-    // A tecla 'E' para coletar.
-    public void OnCollect(InputValue value)
+    public void OnCollect(InputValue value) // Tecla 'E'
     {
         if (CurrentState == PlayerState.Gameplay)
         {
             if (animatorController != null) animatorController.TriggerCollectAnimation();
-            // Lógica de coleta de recursos virá aqui no futuro.
         }
     }
 

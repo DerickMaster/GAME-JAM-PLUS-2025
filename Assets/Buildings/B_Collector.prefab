@@ -233,6 +233,7 @@ GameObject:
   - component: {fileID: 8707127067600621159}
   - component: {fileID: -1982124234367358125}
   - component: {fileID: 5153272544835482917}
+  - component: {fileID: -2941872512763984922}
   m_Layer: 0
   m_Name: B_Collector
   m_TagString: Untagged
@@ -295,6 +296,18 @@ MonoBehaviour:
   constructionObject: {fileID: 5155062886967165143}
   finalModelObject: {fileID: 500712696449670177}
   constructionBoxAnimator: {fileID: 1891667525319412914}
+--- !u!114 &-2941872512763984922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8960555313096723623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12428804058730c429208c09b2d02166, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Destructible
 --- !u!1001 &735083285530812784
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ MonoBehaviour:
   buildingName: Motor
   size: {x: 1, y: 1}
   prefab: {fileID: 8960555313096723623, guid: 07bc4b82f2d6a264fafe1047e5523b3e, type: 3}
-  constructionTime: 15
-  metalCost: 0
-  plasticCost: 0
+  constructionTime: 3
+  metalCost: 30
+  plasticCost: 30
+  weight: 10
