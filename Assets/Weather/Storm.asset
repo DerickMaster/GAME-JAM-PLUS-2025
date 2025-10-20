@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Storm
   m_EditorClassIdentifier: Assembly-CSharp::WeatherData
   type: 3
-  displayName_PT: TEMPESTADE
-  hintText_PT: "Rel\xE2mpagos racham a superf\xEDcie podre."
+  displayName_PT: STORM
+  hintText_PT: Lightning cracks the rotten surface.
   icon: {fileID: 0}

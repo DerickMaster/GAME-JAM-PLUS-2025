@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Everything
   m_EditorClassIdentifier: Assembly-CSharp::WeatherData
   type: 7
-  displayName_PT: TUDO
-  hintText_PT: "Nada respira, nada escapa. Tudo \xE9 um s\xF3 caos."
+  displayName_PT: EVERYTHING
+  hintText_PT: Nothing breathes, nothing escapes. All is one chaos.
   icon: {fileID: 0}

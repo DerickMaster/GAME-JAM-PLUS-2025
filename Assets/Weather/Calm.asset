@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Calm
   m_EditorClassIdentifier: Assembly-CSharp::WeatherData
   type: 0
-  displayName_PT: CALMA
-  hintText_PT: "A \xE1gua repousa, mas o fundo ainda observa."
+  displayName_PT: CALM
+  hintText_PT: The water rests, but the depths still watch.
   icon: {fileID: 0}

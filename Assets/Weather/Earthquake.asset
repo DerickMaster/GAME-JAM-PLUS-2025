@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Earthquake
   m_EditorClassIdentifier: Assembly-CSharp::WeatherData
   type: 6
-  displayName_PT: TERREMOTO
-  hintText_PT: "At\xE9 o caranguejo teme o rugido da terra l\xEDquida."
+  displayName_PT: EARTHQUAKE
+  hintText_PT: Even the crab fears the roar of the liquid earth.
   icon: {fileID: 0}
