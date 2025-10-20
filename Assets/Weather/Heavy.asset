@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Heavy
   m_EditorClassIdentifier: Assembly-CSharp::WeatherData
   type: 2
-  displayName_PT: PESADO
-  hintText_PT: "Algo arrasta o fundo\u2026 pesado, paciente."
+  displayName_PT: HEAVY
+  hintText_PT: "Something drags the depths\u2026 heavy, patient."
   icon: {fileID: 0}

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Sinkers
   m_EditorClassIdentifier: Assembly-CSharp::WeatherData
   type: 5
-  displayName_PT: AFUNDADORES
-  hintText_PT: "O trov\xE3o empurra, a \xE1gua engole, os peixes esperam."
+  displayName_PT: SINKERS
+  hintText_PT: The thunder pushes, the water swallows, the fish wait.
   icon: {fileID: 0}

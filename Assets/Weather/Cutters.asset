@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Cutters
   m_EditorClassIdentifier: Assembly-CSharp::WeatherData
   type: 1
-  displayName_PT: CORTADORES
-  hintText_PT: "L\xE2minas de escamas cortam a sujeira."
+  displayName_PT: CUTTERS
+  hintText_PT: Blades of scales cut through the filth.
   icon: {fileID: 0}

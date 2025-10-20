@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Predators
   m_EditorClassIdentifier: Assembly-CSharp::WeatherData
   type: 4
-  displayName_PT: PREDADORES
-  hintText_PT: O mar inteiro virou dentes.
+  displayName_PT: PREDATORS
+  hintText_PT: The whole sea turned into teeth.
   icon: {fileID: 0}
