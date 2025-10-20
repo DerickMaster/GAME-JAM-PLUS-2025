@@ -114,7 +114,6 @@ GameObject:
   - component: {fileID: 4067526248350001581}
   - component: {fileID: 5367170761952340754}
   - component: {fileID: 3843830737069537143}
-  - component: {fileID: 84702280101718005}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -262,38 +261,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &84702280101718005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4381369632049207907}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b5c9596857fd294fa0754e3e8d03595, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FMOD_AnimationSoundHelper
-  oneShotSounds:
-  - Guid:
-      Data1: 1327180873
-      Data2: 1159382405
-      Data3: -1327443053
-      Data4: -903651977
-    Path: event:/SFX/Wrecker_Walking
-  - Guid:
-      Data1: -1062209406
-      Data2: 1320395621
-      Data3: -1523214156
-      Data4: -921990634
-    Path: event:/SFX/Wrecker_Jump
-  - Guid:
-      Data1: 1068417231
-      Data2: 1091163552
-      Data3: -1692051057
-      Data4: -793682432
-    Path: event:/SFX/Collector_Catch
-  loopingSoundObject: {fileID: 0}
 --- !u!1 &5179676465304383648
 GameObject:
   m_ObjectHideFlags: 0
@@ -461,6 +428,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 153cd9aa598bb224ca334961b8e99e6f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4385932709220864885}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 153cd9aa598bb224ca334961b8e99e6f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 121518797864284988}
   m_SourcePrefab: {fileID: 100100000, guid: 153cd9aa598bb224ca334961b8e99e6f, type: 3}
 --- !u!4 &5855414548166049472 stripped
 Transform:
@@ -506,3 +476,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a0152430c2623245a120d17e3e6c81a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimatorController
+--- !u!114 &121518797864284988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6487800500915217530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b5c9596857fd294fa0754e3e8d03595, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FMOD_AnimationSoundHelper
+  oneShotSounds:
+  - Guid:
+      Data1: 1327180873
+      Data2: 1159382405
+      Data3: -1327443053
+      Data4: -903651977
+    Path: event:/SFX/Wrecker_Walking
+  - Guid:
+      Data1: -1062209406
+      Data2: 1320395621
+      Data3: -1523214156
+      Data4: -921990634
+    Path: event:/SFX/Wrecker_Jump
+  - Guid:
+      Data1: 1068417231
+      Data2: 1091163552
+      Data3: -1692051057
+      Data4: -793682432
+    Path: event:/SFX/Collector_Catch
+  loopingSoundObject: {fileID: 0}

@@ -59,6 +59,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 53cb9c0015e84484e99c063a07b693fa, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4762032537677756760}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 53cb9c0015e84484e99c063a07b693fa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 366927497875721984}
   m_SourcePrefab: {fileID: 100100000, guid: 53cb9c0015e84484e99c063a07b693fa, type: 3}
 --- !u!1 &5023046922097038888 stripped
 GameObject:
@@ -85,3 +88,25 @@ MonoBehaviour:
       Data4: -261555049
     Path: event:/SFX/Cardume_Action
   loopingSoundObject: {fileID: 0}
+--- !u!95 &366927497875721984
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5023046922097038888}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b51bdac292fbb3e479870644dcb4f897, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

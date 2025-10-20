@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class WeatherManager : MonoBehaviour
 {
@@ -17,8 +18,24 @@ public class WeatherManager : MonoBehaviour
     private float crabAttackTimer;
     private bool isHeavyDay = false;
 
-    // --- NOVA CONSTANTE PARA A TEMPESTADE ---
-    private const int STORM_WEIGHT_PENALTY = 6;
+    [Header("Evento 'Cortadores'")]
+    [SerializeField] private float minFishAttackInterval = 10f;
+    [SerializeField] private float maxFishAttackInterval = 30f;
+    private float fishAttackTimer;
+    private bool isCuttersDay = false;
+
+    [Header("Evento 'Tempestade'")]
+    [SerializeField] private float minLightningInterval = 5f;
+    [SerializeField] private float maxLightningInterval = 15f;
+    [SerializeField] private GameObject raftStrikeEffect; // O efeito de raio que atinge a balsa
+    private float lightningStrikeTimer;
+
+    [Header("Efeitos de Tempestade")]
+    [Tooltip("O objeto que contém o sistema de partículas da chuva.")]
+    [SerializeField] private GameObject rainParticleEffect;
+    [Tooltip("O objeto que contém o FMOD Emitter para o som da chuva.")]
+    [SerializeField] private GameObject rainSoundEmitter;
+    private const int STORM_WEIGHT_PENALTY = 3;
 
     public int CurrentDay { get; private set; } = 0;
     public int RadioCount { get; private set; } = 0;
@@ -37,6 +54,7 @@ public class WeatherManager : MonoBehaviour
         }
     }
 
+
     void Update()
     {
         if (isHeavyDay)
@@ -44,7 +62,6 @@ public class WeatherManager : MonoBehaviour
             crabAttackTimer -= Time.deltaTime;
             if (crabAttackTimer <= 0)
             {
-                // Só ataca se o caranguejo não estiver já ativo.
                 if (CrabController.Instance != null && !CrabController.Instance.gameObject.activeSelf)
                 {
                     CrabController.Instance.StartAttackSequence();
@@ -53,11 +70,75 @@ public class WeatherManager : MonoBehaviour
             }
         }
 
+        if (isCuttersDay)
+        {
+            fishAttackTimer -= Time.deltaTime;
+            if (fishAttackTimer <= 0)
+            {
+                if (FishSwarmController.Instance != null && !FishSwarmController.Instance.gameObject.activeSelf)
+                {
+                    FishSwarmController.Instance.StartAttackSequence();
+                }
+                ResetFishTimer();
+            }
+        }
+
+        if (GetDataForDay(0)?.type == WeatherType.Storm)
+        {
+            lightningStrikeTimer -= Time.deltaTime;
+            if (lightningStrikeTimer <= 0)
+            {
+                TriggerLightningStrike();
+                ResetLightningTimer();
+            }
+        }
+    }
+
+    private void TriggerLightningStrike()
+    {
+        // 1. Pergunta se existe um para-raios funcional.
+        LightningRodController availableRod = ConstructionManager.Instance.GetFirstAvailableLightningRod();
+
+        if (availableRod != null)
+        {
+            // SUCESSO: O jogador tem defesa.
+            Debug.Log("[WeatherManager] Para-raios encontrado! O raio será absorvido.");
+            availableRod.AbsorbStrike();
+        }
+        else
+        {
+            // FALHA: O jogador está indefeso.
+            Debug.LogWarning("[WeatherManager] Nenhum para-raios funcional! A balsa será atingida.");
+            StartCoroutine(RaftStrikeSequence());
+        }
+    }
+
+    private IEnumerator RaftStrikeSequence()
+    {
+        if (raftStrikeEffect == null) yield break;
+
+        raftStrikeEffect.SetActive(true);
+        // Aqui você pode adicionar um som de raio atingindo a balsa.
+        yield return new WaitForSeconds(1.5f); // Duração do efeito visual.
+
+        GridManager.Instance.BreakRandomSlots(2); // Quebra 2 slots.
+
+        raftStrikeEffect.SetActive(false);
+    }
+
+    private void ResetLightningTimer()
+    {
+        lightningStrikeTimer = Random.Range(minLightningInterval, maxLightningInterval);
     }
 
     private void ResetCrabTimer()
     {
         crabAttackTimer = Random.Range(minCrabAttackInterval, maxCrabAttackInterval);
+    }
+
+    private void ResetFishTimer()
+    {
+        fishAttackTimer = Random.Range(minFishAttackInterval, maxFishAttackInterval);
     }
 
     // --- NOVA LÓGICA NO START ---
@@ -70,6 +151,11 @@ public class WeatherManager : MonoBehaviour
             Debug.Log($"<color=blue>[WeatherManager]</color> O jogo começou em uma tempestade! Adicionando peso extra.");
             RaftStatusManager.Instance.AddWeight(STORM_WEIGHT_PENALTY);
         }
+
+        if (rainParticleEffect != null) rainParticleEffect.SetActive(false);
+        if (rainSoundEmitter != null) rainSoundEmitter.SetActive(false);
+
+        if (raftStrikeEffect != null) raftStrikeEffect.SetActive(false); // Garante que comece desligado.
     }
 
     public void RegisterRadio() { RadioCount++; }
@@ -84,17 +170,70 @@ public class WeatherManager : MonoBehaviour
         return weatherDataMap.ContainsKey(type) ? weatherDataMap[type] : null;
     }
 
+    private void ApplyWeatherEffectsForCurrentDay()
+    {
+        WeatherData todayData = GetDataForDay(0);
+        if (todayData == null) return;
+
+        // Anuncia o novo dia (se não for o primeiro frame do jogo)
+        if (Time.time > 0) // Time.time é 0 no primeiro frame
+        {
+            WeatherUIManager.Instance.ShowDayAnnouncement(todayData);
+        }
+
+        bool isStormy = todayData.type == WeatherType.Storm;
+
+        if (isStormy)
+        {
+            LightingManager.Instance.SetStormLighting();
+            RaftStatusManager.Instance.AddWeight(STORM_WEIGHT_PENALTY);
+        }
+        else
+        {
+            LightingManager.Instance.SetNormalLighting();
+        }
+
+
+        if (rainParticleEffect != null) rainParticleEffect.SetActive(isStormy);
+        if (rainSoundEmitter != null) rainSoundEmitter.SetActive(isStormy);
+
+        // --- LÓGICA DA TEMPESTADE ---
+        if (todayData.type == WeatherType.Storm)
+        {
+            ResetLightningTimer();
+            LightingManager.Instance.SetStormLighting();
+            RaftStatusManager.Instance.AddWeight(STORM_WEIGHT_PENALTY);
+        }
+
+        else
+        {
+            // Garante que a iluminação volte ao normal se não for tempestade.
+            LightingManager.Instance.SetNormalLighting();
+        }
+
+        // --- LÓGICA DO PESADO ---
+        if (todayData.type == WeatherType.Heavy)
+        {
+            isHeavyDay = true;
+            ResetCrabTimer();
+        }
+
+        // --- LÓGICA DOS CORTADORES ---
+        if (todayData.type == WeatherType.Cutters)
+        {
+            isCuttersDay = true;
+            ResetFishTimer();
+        }
+    }
+
     public void AdvanceToNextDay()
     {
-        // --- LÓGICA ATUALIZADA AQUI ---
 
-        // 1. Verifica o clima do dia que está TERMINANDO.
         WeatherData endedDayData = GetDataForDay(0);
         if (endedDayData != null && endedDayData.type == WeatherType.Storm)
         {
-            // Se era uma tempestade, remove o peso extra.
-            Debug.Log($"<color=blue>[WeatherManager]</color> A tempestade acabou! Removendo peso extra.");
-            RaftStatusManager.Instance.RemoveWeight(STORM_WEIGHT_PENALTY);
+            if (endedDayData.type == WeatherType.Heavy) isHeavyDay = false;
+            if (endedDayData.type == WeatherType.Cutters) isCuttersDay = false;
         }
 
         // 2. Avança para o próximo dia.
@@ -118,13 +257,13 @@ public class WeatherManager : MonoBehaviour
                 ResetCrabTimer();
             }
 
-            // 4. Verifica se o NOVO dia é uma tempestade.
-            if (newDayData.type == WeatherType.Storm)
+            else if (newDayData.type == WeatherType.Cutters) // Liga o evento
             {
-                // Se for, adiciona o peso extra.
-                Debug.Log($"<color=blue>[WeatherManager]</color> Uma nova tempestade começou! Adicionando peso extra.");
-                RaftStatusManager.Instance.AddWeight(STORM_WEIGHT_PENALTY);
+                isCuttersDay = true;
+                ResetFishTimer();
             }
+
+            ApplyWeatherEffectsForCurrentDay();
         }
     }
 }

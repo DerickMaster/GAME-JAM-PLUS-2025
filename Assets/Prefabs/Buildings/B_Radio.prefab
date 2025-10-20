@@ -109,7 +109,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 500, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8716145807492246339
 GameObject:
@@ -220,7 +220,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 500, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8960555313096723623
 GameObject:
@@ -589,6 +589,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4098647067053717406, guid: f941f134441c75b4388a700e3c91697a, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 20aaf18113dda6f419d9264701c503b7, type: 2}
     - target: {fileID: 919132149155446097, guid: f941f134441c75b4388a700e3c91697a, type: 3}
       propertyPath: m_Name
       value: FinalModel

@@ -59,6 +59,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 798f9d702d7ca7247adbd385279b9585, type: 3}
       insertIndex: -1
       addedObject: {fileID: -5168526489670186725}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 798f9d702d7ca7247adbd385279b9585, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 576396482205137816}
   m_SourcePrefab: {fileID: 100100000, guid: 798f9d702d7ca7247adbd385279b9585, type: 3}
 --- !u!1 &3875713246351602749 stripped
 GameObject:
@@ -85,3 +88,25 @@ MonoBehaviour:
       Data4: -101208675
     Path: event:/SFX/Ray_Damage
   loopingSoundObject: {fileID: 0}
+--- !u!95 &576396482205137816
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3875713246351602749}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ed29cfa1506523c4c8a5e79a16a0079d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
