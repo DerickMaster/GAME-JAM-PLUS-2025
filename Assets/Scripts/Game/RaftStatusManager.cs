@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement; // << ADICIONADO: Necessário para gerenciar cenas
 
 public class RaftStatusManager : MonoBehaviour
 {
@@ -38,25 +39,18 @@ public class RaftStatusManager : MonoBehaviour
         }
     }
 
-    // --- FUNÇÕES DE ATALHO (CHAMADAS POR OUTROS SCRIPTS) ---
-
-    // Chamada pelo GridManager ao iniciar a construção
     public void AddBuilding(BuildingData data)
     {
         AddWeight(data.weight);
-        // A potência só é adicionada pelo Constructible quando a construção termina
     }
 
-    // Chamada pelo Destructible ao desmantelar
     public void RemoveBuilding(BuildingData data)
     {
         RemoveWeight(data.weight);
 
-        // Se o item que está sendo removido era um motor E NÃO estava quebrado,
-        // sua potência estava ativa, então a removemos.
         if (data.isMotor)
         {
-            Destructible d = GetComponent<Destructible>(); // Verificação para o futuro
+            Destructible d = GetComponent<Destructible>();
             if (d == null || !d.IsBroken)
             {
                 RemovePower(data.powerProvided);
@@ -64,8 +58,6 @@ public class RaftStatusManager : MonoBehaviour
         }
     }
 
-
-    // --- FUNÇÕES GRANULARES (USADAS INTERNAMENTE E POR OUTROS SCRIPTS) ---
     public void AddWeight(int amount)
     {
         CurrentWeight += amount;
@@ -101,9 +93,15 @@ public class RaftStatusManager : MonoBehaviour
         }
     }
 
+    // --- FUNÇÃO MODIFICADA ---
     private void GameOver()
     {
         Debug.LogError("GAME OVER! A balsa foi engolida pela fera do mar.");
-        Time.timeScale = 0f;
+
+        // Garante que o tempo do jogo volte ao normal antes de carregar a nova cena.
+        Time.timeScale = 1f;
+
+        // Carrega a cena de Game Over.
+        SceneManager.LoadScene("LoseScreen");
     }
 }

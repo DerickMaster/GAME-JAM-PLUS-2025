@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class WeatherManager : MonoBehaviour
 {
@@ -29,6 +30,8 @@ public class WeatherManager : MonoBehaviour
     [SerializeField] private float maxLightningInterval = 15f;
     [SerializeField] private GameObject raftStrikeEffect; // O efeito de raio que atinge a balsa
     private float lightningStrikeTimer;
+
+    [SerializeField] private int winDay = 15;
 
     [Header("Efeitos de Tempestade")]
     [Tooltip("O objeto que contém o sistema de partículas da chuva.")]
@@ -229,6 +232,12 @@ public class WeatherManager : MonoBehaviour
     public void AdvanceToNextDay()
     {
 
+        if (CurrentDay >= winDay)
+        {
+            WinGame();
+            return; // Impede que o resto da função seja executado.
+        }
+
         WeatherData endedDayData = GetDataForDay(0);
         if (endedDayData != null && endedDayData.type == WeatherType.Storm)
         {
@@ -265,5 +274,12 @@ public class WeatherManager : MonoBehaviour
 
             ApplyWeatherEffectsForCurrentDay();
         }
+    }
+
+    private void WinGame()
+    {
+        Debug.Log($"<color=yellow>VITÓRIA!</color> O jogador sobreviveu até o dia {CurrentDay}.");
+        Time.timeScale = 1f; // Garante que o tempo não esteja pausado.
+        SceneManager.LoadScene("WinScreen");
     }
 }
