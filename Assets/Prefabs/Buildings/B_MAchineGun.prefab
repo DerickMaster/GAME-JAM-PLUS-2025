@@ -741,8 +741,6 @@ GameObject:
   - component: {fileID: -1982124234367358125}
   - component: {fileID: 3603414459718100216}
   - component: {fileID: -716118915685578187}
-  - component: {fileID: 3734472066053976480}
-  - component: {fileID: 4259274762910429148}
   m_Layer: 0
   m_Name: B_MAchineGun
   m_TagString: Untagged
@@ -825,33 +823,6 @@ MonoBehaviour:
   breakageChance: 0.1
   haveSound: 0
   loopableSoundObject: {fileID: 0}
---- !u!114 &3734472066053976480
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8960555313096723623}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b5c9596857fd294fa0754e3e8d03595, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FMOD_AnimationSoundHelper
-  oneShotSounds: []
-  loopingSoundObject: {fileID: 7498579888170560839}
---- !u!114 &4259274762910429148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8960555313096723623}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ed8ff11365f46d4cb5cb803f4d54ca4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MachineGunController
-  animator: {fileID: 2399831126662020092}
 --- !u!1001 &299000351388029742
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1167,6 +1138,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 12c0157fd377d95429b7c756d3d681e6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8312634862714898425}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 12c0157fd377d95429b7c756d3d681e6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9133476719590725145}
   m_SourcePrefab: {fileID: 100100000, guid: 12c0157fd377d95429b7c756d3d681e6, type: 3}
 --- !u!1 &5116388968032281208 stripped
 GameObject:
@@ -1209,6 +1183,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FMOD_AnimationSoundHelper
   oneShotSounds: []
   loopingSoundObject: {fileID: 7498579888170560839}
+--- !u!114 &9133476719590725145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5116388968032281208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ed8ff11365f46d4cb5cb803f4d54ca4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MachineGunController
+  animator: {fileID: 2399831126662020092}
 --- !u!4 &5497417418688624834 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 12c0157fd377d95429b7c756d3d681e6, type: 3}

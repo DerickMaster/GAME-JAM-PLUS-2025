@@ -2546,13 +2546,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.39343533, y: -0.0000031894233, z: 0.0000013077089, w: -0.91935235}
-  m_LocalPosition: {x: -0.10454, y: 17.63, z: -14.08}
+  m_LocalRotation: {x: -0.48900777, y: -0.0000033104413, z: 0.0000009609817, w: -0.87227947}
+  m_LocalPosition: {x: -0.10454, y: 21.48, z: -9.85}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2123126374}
-  m_LocalEulerAnglesHint: {x: 46.337, y: -360, z: 0}
+  m_LocalEulerAnglesHint: {x: 58.551, y: -359.999, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3154,6 +3154,7 @@ MonoBehaviour:
   minLightningInterval: 5
   maxLightningInterval: 15
   raftStrikeEffect: {fileID: 1282035086}
+  winDay: 15
   rainParticleEffect: {fileID: 198776502}
   rainSoundEmitter: {fileID: 2131547986}
 --- !u!1001 &396458227

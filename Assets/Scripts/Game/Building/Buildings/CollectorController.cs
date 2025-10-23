@@ -6,6 +6,7 @@ public class CollectorController : MonoBehaviour
     // --- NOVA VARIÁVEL ---
     // Guarda a referência do nosso BoxCollider para usá-lo.
     private BoxCollider triggerArea;
+    [SerializeField] Animator animator;
 
     // --- NOVO: Método Awake() ---
     // Usamos Awake() para garantir que a referência do collider seja pega antes do Start().
@@ -28,6 +29,7 @@ public class CollectorController : MonoBehaviour
         CollectibleResource resource = other.GetComponent<CollectibleResource>();
         if (resource != null)
         {
+            animator.SetTrigger("OnPìckUp");
             resource.SetPullTarget(transform);
         }
     }
