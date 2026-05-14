@@ -53,18 +53,12 @@ public class Constructible : MonoBehaviour
 
     public void SpeedUpConstruction()
     {
-        if (!isConstructing) return;
-        int metalCost = buildingData.metalCost / 2;
-        int plasticCost = buildingData.plasticCost / 2;
-        if (ResourceManager.Instance.HasEnoughResources(plasticCost, metalCost))
-        {
-            ResourceManager.Instance.SpendResources(plasticCost, metalCost);
-            StartCoroutine(CompleteConstructionSequence());
-        }
-        else
-        {
-            Debug.Log("Recursos insuficientes para acelerar!");
-        }
+        if (!isConstructing) return; // Só funciona se estiver construindo
+
+        Debug.Log($"Construção de '{buildingData.buildingName}' foi acelerada!");
+
+        // Chama a finalização da construção imediatamente e de graça.
+        StartCoroutine(CompleteConstructionSequence());
     }
 
     private IEnumerator CompleteConstructionSequence()

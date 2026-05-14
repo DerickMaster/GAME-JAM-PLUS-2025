@@ -507,4 +507,10 @@ MonoBehaviour:
       Data3: -1692051057
       Data4: -793682432
     Path: event:/SFX/Collector_Catch
+  - Guid:
+      Data1: 1371029722
+      Data2: 1201294817
+      Data3: 1229462423
+      Data4: 386691644
+    Path: event:/SFX/Put_Floor
   loopingSoundObject: {fileID: 0}

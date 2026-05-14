@@ -15,6 +15,10 @@ public class Destructible : MonoBehaviour
     [SerializeField] public bool haveSound = false;
     [SerializeField] public GameObject loopableSoundObject;
 
+    [Header("Sistema de Desmantelamento")]
+    [Tooltip("O tempo fixo em segundos para desmantelar esta construção.")]
+    [SerializeField] private float dismantleTimeToComplete = 0.5f;
+
     private BuildingData buildingData;
     private List<GridCell> occupiedCells;
     private float dismantleProgress = 0f;
@@ -24,7 +28,6 @@ public class Destructible : MonoBehaviour
     private int repairPlasticCost;
     private int repairMetalCost;
     private readonly int isBrokenHash = Animator.StringToHash("isBroken");
-    private readonly float dismantleTimeToComplete = 2.0f;
 
     private bool isInitialized = false;
 

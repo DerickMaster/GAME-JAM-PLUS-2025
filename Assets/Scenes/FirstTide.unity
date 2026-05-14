@@ -3147,6 +3147,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 19ee5851dfa5746468a15dd59f35c758, type: 2}
   - {fileID: 11400000, guid: 19ee5851dfa5746468a15dd59f35c758, type: 2}
   fullForecast: 000000000000000003000000010000000200000003000000020000000200000003000000010000000100000002000000030000000300000003000000
+  winDay: 15
   minCrabAttackInterval: 10
   maxCrabAttackInterval: 30
   minFishAttackInterval: 10
@@ -3154,7 +3155,6 @@ MonoBehaviour:
   minLightningInterval: 5
   maxLightningInterval: 15
   raftStrikeEffect: {fileID: 1282035086}
-  winDay: 15
   rainParticleEffect: {fileID: 198776502}
   rainSoundEmitter: {fileID: 2131547986}
 --- !u!1001 &396458227
